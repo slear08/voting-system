@@ -22,9 +22,9 @@ const CandidatesSchema = new mongoose.Schema(
     },
     voteCounts: {
       type: Number,
-      required: true,
+      default: 0,
     },
-    platform: {
+    platforms: {
       type: [
         new mongoose.Schema(
           {
