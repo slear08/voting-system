@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
-const OrganizationSchema = new mongoose.Schema(
+const AdminSchema = new mongoose.Schema(
   {
-    picture: {
+    email: {
       type: String,
       required: true,
     },
-    title: {
+    password: {
       type: String,
       required: true,
     },
-    info: {
+    name: {
       type: String,
       required: true,
     },
@@ -20,6 +20,6 @@ const OrganizationSchema = new mongoose.Schema(
   }
 );
 
-const Organization = mongoose.model("organizations", OrganizationSchema);
+const Admin = mongoose.model("admins", AdminSchema);
 
-export default Organization;
+export default Admin;
