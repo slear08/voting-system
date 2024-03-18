@@ -4,6 +4,7 @@ const VotersSchema = new mongoose.Schema(
   {
     email: {
       type: String,
+      unique: true,
       required: true,
     },
     password: {
@@ -24,12 +25,15 @@ const VotersSchema = new mongoose.Schema(
     suffixName: {
       type: String,
     },
-    voted: {
+    status: {
       type: Boolean,
-      required: true,
       default: false,
     },
-    votes: [{ type: mongoose.Schema.Types.Mixed, required: true }],
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "organizations",
+    },
+    votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "votes" }],
   },
   {
     timestamps: true,
@@ -42,6 +46,6 @@ VotersSchema.virtual("fullname").get(function () {
 
 VotersSchema.set("toJSON", { virtuals: true });
 
-const Voters = mongoose.model("voter", VotersSchema);
+const Voters = mongoose.model("voters", VotersSchema);
 
 export default Voters;

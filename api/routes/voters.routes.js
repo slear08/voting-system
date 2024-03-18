@@ -1,15 +1,12 @@
 import express from "express";
-import {
-  createVoter,
-  markVoterAsVoted,
-} from "../controllers/voters.controllers.js";
-
+import { createVoter, createVote } from "../controllers/voters.controllers.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 // Route for creating a new voter
 router.post("/voters", createVoter);
 
 // Route for marking a voter as voted
-router.put("/voters/:voterId/mark-voted", markVoterAsVoted);
+router.post("/voters/vote-candidate", authMiddleware, createVote);
 
 export default router;

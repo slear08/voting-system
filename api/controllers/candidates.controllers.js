@@ -25,33 +25,45 @@ export const getCandidatesByOrganizationId = async (req, res) => {
 
 // Controller for creating a new candidate
 export const createCandidate = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
   try {
     upload.single("file")(req, res, async (err) => {
-      const { file } = req;
+      try {
+        const { file } = req;
 
-      const storageRef = ref(
-        storage,
-        `voting-system/candidate-profile/${file.originalname}`
-      );
-      const metadata = {
-        contentType: file.mimetype,
-      };
-      const snapshot = await uploadBytesResumable(
-        storageRef,
-        file.buffer,
-        metadata
-      );
-      const downloadURL = await getDownloadURL(snapshot.ref);
+        if (!req.file) {
+          return res.status(400).json({ message: "No file uploaded" });
+        }
 
-      const newCandidate = new Candidates({
-        profile: downloadURL,
-        ...req.body,
-      });
-      const savedCandidate = await newCandidate.save();
-      res.status(201).json(savedCandidate);
+        const storageRef = ref(
+          storage,
+          `voting-system/candidate-profile/${file.originalname}`
+        );
+        const metadata = {
+          contentType: file.mimetype,
+        };
+        const snapshot = await uploadBytesResumable(
+          storageRef,
+          file.buffer,
+          metadata
+        );
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        const newCandidate = new Candidates({
+          profile: downloadURL,
+          ...req.body,
+        });
+
+        await newCandidate.save();
+
+        res.status(201).json({
+          message: "Candidates saved successfully",
+        });
+      } catch (error) {
+        return res.status(500).json({
+          message: "Error saving",
+          error: error.message,
+        });
+      }
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -97,7 +109,9 @@ export const updateCandidate = async (req, res) => {
         return res.status(404).json({ message: "Candidate not found" });
       }
 
-      res.json(updatedCandidate);
+      res.status(200).json({
+        message: "Candidate updated successfully",
+      });
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

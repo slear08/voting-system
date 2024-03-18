@@ -19,6 +19,9 @@ export const createOrganization = async (req, res) => {
     upload.single("file")(req, res, async (err) => {
       try {
         const { file } = req;
+        if (!req.file) {
+          return res.status(400).json({ message: "No file uploaded" });
+        }
         const { title, info } = req.body;
 
         const storageRef = ref(

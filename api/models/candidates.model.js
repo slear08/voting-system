@@ -53,13 +53,19 @@ const CandidatesSchema = new mongoose.Schema(
     },
     organization: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "organization",
+      ref: "organizations",
     },
   },
   {
     timestamps: true,
   }
 );
+
+CandidatesSchema.virtual("fullname").get(function () {
+  return `${this.firstName} ${this.middleName} ${this.lastName} ${this.suffixName}`;
+});
+
+CandidatesSchema.set("toJSON", { virtuals: true });
 
 const Candidates = mongoose.model("candidate", CandidatesSchema);
 

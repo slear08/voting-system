@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
 import Voters from "../models/voters.model.js";
+import Candidates from "../models/candidates.model.js";
+import Votes from "../models/votes.model.js";
 
 export const createVoter = async (req, res) => {
   try {
@@ -7,8 +9,14 @@ export const createVoter = async (req, res) => {
       req.body;
 
     // Check if email domain is "@rtu.edu.ph"
-    if (!email.endsWith("@rtu.edu.ph")) {
+    if (!email.endsWith("g.batstate.edu.ph")) {
       return res.status(400).json({ message: "Invalid email domain" });
+    }
+
+    // Check if the email already exists in the database
+    const existingVoter = await Voters.findOne({ email });
+    if (existingVoter) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,24 +40,51 @@ export const createVoter = async (req, res) => {
   }
 };
 
-export const markVoterAsVoted = async (req, res) => {
+export const createVote = async (req, res) => {
+  const { candidateID } = req.body;
+
+  const voterId = req.user._id;
+
   try {
-    const { voterId } = req.params;
+    const votePromises = candidateID.map(async (id) => {
+      const candidate = await Candidates.findById(id);
 
-    const updatedVoter = await Voters.findByIdAndUpdate(
-      voterId,
-      { voted: true },
-      { new: true }
-    );
+      if (!candidate) {
+        res
+          .status(404)
+          .json({
+            success: false,
+            message: `Candidate with ID ${id} not found`,
+          });
+      }
 
-    if (!updatedVoter) {
-      return res.status(404).json({ message: "Voter not found" });
-    }
+      const newVote = new Votes({
+        candidateID: candidate._id,
+        voter: voterId,
+        position: candidate.position,
+        fullname: candidate.fullname,
+      });
 
-    return res.status(200).json({ message: "Voter has been marked as voted" });
+      await newVote.save();
+      await Candidates.findByIdAndUpdate(candidate._id, {
+        $inc: { voteCounts: 1 },
+      });
+
+      return newVote._id;
+    });
+
+    const voteIDs = await Promise.all(votePromises);
+
+    await Voters.findByIdAndUpdate(voterId, {
+      $set: { status: true },
+      $push: { votes: { $each: [voteIDs] } },
+    });
+
+    res
+      .status(201)
+      .json({ success: true, message: "Votes created successfully", voteIDs });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to create votes" });
   }
 };
