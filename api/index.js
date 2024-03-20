@@ -6,6 +6,7 @@ import connectDB from "./configs/index.js";
 
 // Import routes
 import candidateRoutes from "./routes/candidates.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
 import voterRoutes from "./routes/voters.routes.js";
 
@@ -22,8 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Use routes
-app.use(candidateRoutes);
-app.use(organizationRoutes);
-app.use(voterRoutes);
+app.use("/api", candidateRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api", organizationRoutes);
+app.use("/api", voterRoutes);
 
 app.listen(PORT, () => console.log(`Server listening on ${PORT} 💻`));

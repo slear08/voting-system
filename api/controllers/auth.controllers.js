@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Voters from "../models/voters.model.js";
 import Admin from "../models/admin.model.js";
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId }, process.env.SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };

@@ -5,8 +5,15 @@ import Votes from "../models/votes.model.js";
 
 export const createVoter = async (req, res) => {
   try {
-    const { email, password, firstName, middleName, lastName, suffixName } =
-      req.body;
+    const {
+      email,
+      password,
+      firstName,
+      middleName,
+      lastName,
+      suffixName,
+      organization,
+    } = req.body;
 
     // Check if email domain is "@rtu.edu.ph"
     if (!email.endsWith("g.batstate.edu.ph")) {
@@ -28,6 +35,7 @@ export const createVoter = async (req, res) => {
       middleName,
       lastName,
       suffixName,
+      organization,
     });
 
     await newVoter.save();
@@ -41,26 +49,40 @@ export const createVoter = async (req, res) => {
 };
 
 export const createVote = async (req, res) => {
-  const { candidateID } = req.body;
-
-  const voterId = req.user._id;
-
   try {
+    const { candidateID } = req.body;
+
+    const voterId = req.user[0]._id;
+
+    const existingVoter = await Voters.findById(voterId);
+    if (existingVoter.status) {
+      return res.status(403).json({
+        success: false,
+        message: "You have already voted",
+      });
+    }
+
+    if (!candidateID || candidateID.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No candidateID provided",
+      });
+    }
+
     const votePromises = candidateID.map(async (id) => {
       const candidate = await Candidates.findById(id);
 
       if (!candidate) {
-        res
-          .status(404)
-          .json({
-            success: false,
-            message: `Candidate with ID ${id} not found`,
-          });
+        return res.status(404).json({
+          success: false,
+          message: `Candidate with ID ${id} not found`,
+        });
       }
 
       const newVote = new Votes({
         candidateID: candidate._id,
         voter: voterId,
+        candidate: candidate.fullname,
         position: candidate.position,
         fullname: candidate.fullname,
       });
@@ -86,5 +108,18 @@ export const createVote = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Failed to create votes" });
+  }
+};
+
+export const getAllVoters = async (_, res) => {
+  try {
+    const allVoters = await Voters.find()
+      .select("-password")
+      .populate("organization")
+      .populate("votes");
+    res.status(200).json(allVoters);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to fetch voters" });
   }
 };

@@ -32,6 +32,7 @@ const VotersSchema = new mongoose.Schema(
     organization: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "organizations",
+      required: true,
     },
     votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "votes" }],
   },
