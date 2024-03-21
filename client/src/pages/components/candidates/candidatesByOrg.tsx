@@ -1,12 +1,13 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetCandidatesByOrgID } from '@/api/services/general/GetCandidate';
 import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
 import CandidateCard from '@/components/cards/candidate-card';
+import { Button } from '@/components/ui/button';
 
 const candidateByOrg = () => {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const { data, isLoading } = useQuery({
         queryFn: () => {
             if (id) {
@@ -48,6 +49,13 @@ const candidateByOrg = () => {
 
     return (
         <div className="px-10 h-screen">
+            <Button
+                className="mx-5 text-white hover:bg-primary-foreground"
+                onClick={() => {
+                    navigate(-1);
+                }}>
+                BACK
+            </Button>
             <div>
                 <p className="text-xl text-center font-semibold">List of candidates</p>
                 <h1 className="text-4xl text-center font-semibold text-primary">
