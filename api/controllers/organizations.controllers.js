@@ -19,7 +19,7 @@ export const createOrganization = async (req, res) => {
         if (!req.file) {
           return res.status(400).json({ message: "No file uploaded" });
         }
-        const { title, info } = req.body;
+        const { title, info, content } = req.body;
 
         const storageRef = ref(
           storage,
@@ -39,6 +39,7 @@ export const createOrganization = async (req, res) => {
           picture: downloadURL,
           title,
           info,
+          content,
         });
 
         const savedOrganization = await newOrganization.save();

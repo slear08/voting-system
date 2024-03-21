@@ -21,15 +21,6 @@ const Navbar = () => {
                     </li>
                     <li>
                         <NavLink
-                            to="/about"
-                            className={({ isActive }) =>
-                                isActive ? 'text-primary font-bold' : ''
-                            }>
-                            About
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
                             to="/candidates"
                             className={({ isActive }) =>
                                 isActive ? 'text-primary font-bold' : ''
@@ -44,6 +35,15 @@ const Navbar = () => {
                                 isActive ? 'text-primary font-bold' : ''
                             }>
                             Organizations
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/about"
+                            className={({ isActive }) =>
+                                isActive ? 'text-primary font-bold' : ''
+                            }>
+                            About Us
                         </NavLink>
                     </li>
                 </ul>

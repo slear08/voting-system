@@ -3,13 +3,11 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 const ClientLayout = () => {
     return (
-        <>
+        <div className="h-screen">
             <Navbar />
-            <div>
-                <Outlet />
-            </div>
+            <Outlet />
             <Footer />
-        </>
+        </div>
     );
 };
 

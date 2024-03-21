@@ -12,6 +12,7 @@ import candidateRoutes from "./routes/candidates.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
 import voterRoutes from "./routes/voters.routes.js";
+import adminRoute from "./routes/admin.routes.js";
 
 dotenv.config();
 connectDB();
@@ -57,6 +58,7 @@ app.use(passport.session());
 
 // Use routes
 app.use("/api", candidateRoutes);
+app.use("/api", adminRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api", organizationRoutes);
 app.use("/api", voterRoutes);
