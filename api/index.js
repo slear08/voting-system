@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./configs/index.js";
+import "./configs/passport.js";
+import passport from "passport";
+import cookieSession from "cookie-session";
 
 // Import routes
 import candidateRoutes from "./routes/candidates.routes.js";
@@ -17,15 +20,47 @@ const PORT = process.env.PORT || 6000;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["voting-system"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
+
+app.use(function (request, response, next) {
+  if (request.session && !request.session.regenerate) {
+    request.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (request.session && !request.session.save) {
+    request.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Use routes
 app.use("/api", candidateRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", organizationRoutes);
 app.use("/api", voterRoutes);
+
+app.get("/", (req, res) => res.send("SERVER IS READY!"));
 
 app.listen(PORT, () => console.log(`Server listening on ${PORT} 💻`));

@@ -7,24 +7,15 @@ const VotersSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    password: {
+    googleId: {
       type: String,
       required: true,
     },
-    firstName: {
+    name: {
       type: String,
       required: true,
     },
-    middleName: {
-      type: String,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    suffixName: {
-      type: String,
-    },
+    profile: { type: String },
     status: {
       type: Boolean,
       default: false,
@@ -32,7 +23,6 @@ const VotersSchema = new mongoose.Schema(
     organization: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "organizations",
-      required: true,
     },
     votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "votes" }],
   },
@@ -40,12 +30,6 @@ const VotersSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-VotersSchema.virtual("fullname").get(function () {
-  return `${this.firstName} ${this.middleName} ${this.lastName} ${this.suffixName}`;
-});
-
-VotersSchema.set("toJSON", { virtuals: true });
 
 const Voters = mongoose.model("voters", VotersSchema);
 
