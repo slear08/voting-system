@@ -52,9 +52,9 @@ export const createVote = async (req, res) => {
   try {
     const { candidateID } = req.body;
 
-    const voterId = req.user[0]._id;
+    const voterId = req.user.id;
 
-    const existingVoter = await Voters.findById(voterId);
+    const existingVoter = await Voters.find({ googleId: voterId });
     if (existingVoter.status) {
       return res.status(403).json({
         success: false,
@@ -121,5 +121,30 @@ export const getAllVoters = async (_, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Failed to fetch voters" });
+  }
+};
+
+export const updateVoterOrganization = async (req, res) => {
+  const { id } = req.params;
+  const { newOrganizationId } = req.body;
+
+  try {
+    const voter = await Voters.findById({ googleId: id });
+
+    if (!voter) {
+      return res.status(404).json({ message: "Voter not found" });
+    }
+
+    voter.organization = newOrganizationId;
+
+    await voter.save();
+
+    return res.status(200).json({
+      message: "Organization updated successfully",
+      updatedVoter: voter,
+    });
+  } catch (error) {
+    console.error("Error updating organization:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
