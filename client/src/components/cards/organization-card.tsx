@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 const OrganizationCard = ({ image, title, info, link }: any) => {
-    console.log(title);
     return (
         <div className="bg-slate-800 p-4 h-[500px] rounded-xl">
             <div className="h-1/2 rounded-xl overflow-hidden bg-slate-500">

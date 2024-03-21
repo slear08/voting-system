@@ -10,6 +10,7 @@ import Organization from '@/pages/client/organization';
 import OrganizationByID from '@/pages/components/organization';
 import Candidates from '@/pages/client/candidates';
 import CandidatesByID from '@/pages/components/candidates';
+import CandidateByOrg from './pages/components/candidates/candidatesByOrg';
 
 function App() {
     const router = createBrowserRouter([
@@ -42,8 +43,12 @@ function App() {
                     element: <OrganizationByID />
                 },
                 {
-                    path: '/candidates/:id',
+                    path: '/candidate/:id',
                     element: <CandidatesByID />
+                },
+                {
+                    path: '/candidates/org/:id',
+                    element: <CandidateByOrg />
                 },
                 {
                     path: '/signin',

@@ -21,7 +21,6 @@ const OrganizationByID = () => {
         return <div>loading</div>;
     }
 
-    console.log(data);
     return (
         <div>
             <Button

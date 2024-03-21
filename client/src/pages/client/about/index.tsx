@@ -1,4 +1,5 @@
 import hero from '@/assets/hero2.png';
+import logo from '@/assets/favicon.png';
 import {
     Accordion,
     AccordionContent,
@@ -25,7 +26,9 @@ const About = () => {
                         </p>
                         <Accordion type="multiple" className="w-full">
                             <AccordionItem value="item-1">
-                                <AccordionTrigger className="text-xl">Our mission</AccordionTrigger>
+                                <AccordionTrigger className="text-xl text-primary">
+                                    Our mission
+                                </AccordionTrigger>
                                 <AccordionContent className="text-xl">
                                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                                     Possimus nesciunt dolor laborum blanditiis pariatur consequatur
@@ -33,7 +36,9 @@ const About = () => {
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="item-2">
-                                <AccordionTrigger className="text-xl">Our Vision</AccordionTrigger>
+                                <AccordionTrigger className="text-xl text-primary">
+                                    Our Vision
+                                </AccordionTrigger>
                                 <AccordionContent className="text-xl">
                                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                                     Possimus nesciunt dolor laborum blanditiis pariatur consequatur
@@ -49,11 +54,16 @@ const About = () => {
             </div>
             <div className="p-10 flex">
                 <div>
-                    <h1 className="text-5xl">Our Team</h1>
-                    <p className="text-2xl">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus,
-                        officia.
-                    </p>
+                    <div>
+                        <h1 className="text-5xl">Our Team</h1>
+                        <p className="text-2xl">
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                            Necessitatibus, officia.
+                        </p>
+                    </div>
+                    <div className="h-full flex justify-center items-center blur-xl">
+                        <img className="w-full" src={logo} alt="" />
+                    </div>
                 </div>
                 <div className="w-1/2 flex flex-wrap gap-28">
                     <div className="flex gap-5">
