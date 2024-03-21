@@ -12,7 +12,7 @@ const authAdminMiddleware = async (req, res, next) => {
   let token;
 
   if (req.cookies && req.cookies.access_token) {
-    token = req.cookies.token;
+    token = req.cookies.access_token;
 
     jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
       if (err) {

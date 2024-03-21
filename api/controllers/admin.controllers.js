@@ -1,4 +1,5 @@
 import Admin from "../models/admin.model.js";
+import bcrypt from "bcryptjs";
 
 export const createAdmin = async (req, res) => {
   try {
@@ -25,7 +26,7 @@ export const createAdmin = async (req, res) => {
 
     await newAdmin.save();
 
-    return res.status(201).json({ message: "Voter created successfully" });
+    return res.status(201).json({ message: "Admin created successfully" });
   } catch (error) {
     return res
       .status(500)
