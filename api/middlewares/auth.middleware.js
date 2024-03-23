@@ -3,9 +3,10 @@ import Admin from "../models/admin.model.js";
 
 const authMiddleware = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return next();
+    next();
+  } else {
+    res.status(401).json({ message: "Unauthorized" });
   }
-  res.status(401).json({ message: "Unauthorized" });
 };
 
 const authAdminMiddleware = async (req, res, next) => {

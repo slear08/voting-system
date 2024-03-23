@@ -14,7 +14,7 @@ const OrganizationCard = ({ image, title, info, link }: any) => {
             </div>
             <div className="text-center mt-10">
                 <Link
-                    className="bg-primary hover:bg-primary-foreground px-8 py-2 rounded-lg text-white"
+                    className="bg-primary hover:bg-primary-foreground px-8 py-2 rounded-full text-white"
                     to={link}>
                     View More
                 </Link>
