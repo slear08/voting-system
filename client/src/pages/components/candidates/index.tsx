@@ -24,7 +24,7 @@ const CandidatesByID = () => {
     return (
         <div>
             <Button
-                className="mx-5 text-white hover:bg-primary-foreground"
+                className="mx-5 rounded-full text-white hover:bg-primary-foreground"
                 onClick={() => {
                     navigate(-1);
                 }}>

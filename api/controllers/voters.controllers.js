@@ -84,7 +84,6 @@ export const createVote = async (req, res) => {
         voter: voterId,
         candidate: candidate.fullname,
         position: candidate.position,
-        fullname: candidate.fullname,
       });
 
       await newVote.save();

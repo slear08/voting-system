@@ -10,7 +10,8 @@ import Organization from '@/pages/client/organization';
 import OrganizationByID from '@/pages/components/organization';
 import Candidates from '@/pages/client/candidates';
 import CandidatesByID from '@/pages/components/candidates';
-import CandidateByOrg from './pages/components/candidates/candidatesByOrg';
+import CandidateByOrg from '@/pages/components/candidates/candidatesByOrg';
+import Authenticated from '@/pages/components/authenticated';
 
 function App() {
     const router = createBrowserRouter([
@@ -55,13 +56,17 @@ function App() {
                     element: <Login />
                 }
             ]
+        },
+        {
+            path: '/login/success',
+            element: <Authenticated />
         }
     ]);
 
     const queryClient = new QueryClient();
     return (
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />;
+            <RouterProvider router={router} />
         </QueryClientProvider>
     );
 }

@@ -29,6 +29,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
 app.use(function (request, response, next) {
   if (request.session && !request.session.regenerate) {
     request.session.regenerate = (cb) => {
@@ -45,7 +50,7 @@ app.use(function (request, response, next) {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "*",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

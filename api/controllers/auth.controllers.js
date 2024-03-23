@@ -47,9 +47,13 @@ export const userDetails = (req, res) => {
   if (req.user) {
     res.status(200).json({
       success: true,
-      message: "successfull",
+      message: "Successfully retrieved user details",
       user: req.user,
-      //   cookies: req.cookies
+    });
+  } else {
+    res.status(404).json({
+      success: false,
+      message: "User details not found",
     });
   }
 };
@@ -59,11 +63,14 @@ export const googleLogin = passport.authenticate("google", {
 });
 
 export const googleCallback = passport.authenticate("google", {
-  successRedirect: process.env.CLIENT_URL,
+  successRedirect: `${process.env.CLIENT_URL}/login/success`,
   failureRedirect: `${process.env.CLIENT_URL}/error`,
 });
 
 export const logout = (req, res) => {
-  req.logout();
-  res.redirect(process.env.CLIENT_URL);
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+  });
 };

@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetCandidatesByOrgID } from '@/api/services/general/GetCandidate';
 import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
 import CandidateCard from '@/components/cards/candidate-card';
 import { Button } from '@/components/ui/button';
+import useUserStore from '@/store/useUserStore';
+import { RedirectToGoogleSSO } from '@/api/services/client/GoogleSignIn';
+import { BookOpenCheck } from 'lucide-react';
 
-const candidateByOrg = () => {
+const CandidateByOrg = () => {
+    const { user }: any = useUserStore();
     const { id } = useParams();
     const navigate = useNavigate();
     const { data, isLoading } = useQuery({
@@ -27,6 +32,23 @@ const candidateByOrg = () => {
         queryKey: [`organizations-name`]
     });
 
+    const [selectedCandidates, setSelectedCandidates] = useState<{ [position: string]: string }>(
+        {}
+    );
+
+    const handleCardClick = (id: string, position: string) => {
+        setSelectedCandidates((prevState) => ({
+            ...prevState,
+            [position]: id
+        }));
+    };
+
+    const handleSubmit = () => {
+        const selectedCandidateIds = Object.values(selectedCandidates);
+        console.log(selectedCandidateIds); // This array contains only candidate IDs as strings
+        // Here you can perform further actions such as submitting the selected candidates
+    };
+
     if (isLoading) {
         return <div>Loading</div>;
     }
@@ -45,12 +67,14 @@ const candidateByOrg = () => {
         );
     }
 
-    const presidentCandidates = data.filter((candidate: any) => candidate.position === 'President');
+    const candidatePositions = Array.from(
+        new Set(data.map((candidate: any) => candidate.position))
+    );
 
     return (
-        <div className="px-10 h-screen">
+        <div className="p-10">
             <Button
-                className="mx-5 text-white hover:bg-primary-foreground"
+                className="mx-5 rounded-full text-white hover:bg-primary-foreground"
                 onClick={() => {
                     navigate(-1);
                 }}>
@@ -62,21 +86,59 @@ const candidateByOrg = () => {
                     {Organization?.title}
                 </h1>
             </div>
-            <div className="text-3xl mx-2 mt-10">
-                <h1>CANDIDATES FOR PRESIDENT</h1>
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-                {presidentCandidates.map((data: any, key: any) => (
-                    <CandidateCard
-                        key={key}
-                        fullname={data.fullname}
-                        id={data.id}
-                        profile={data.profile}
-                    />
-                ))}
+            {candidatePositions.map((position: any, index: any) => (
+                <div key={index}>
+                    <div className="text-3xl mx-2 mt-10">
+                        <h1>CANDIDATES FOR {position.toUpperCase()}</h1>
+                    </div>
+                    <div className="grid grid-cols-4 gap-4">
+                        {data.map((candidate: any) => {
+                            if (candidate.position === position) {
+                                return (
+                                    <div
+                                        key={candidate.id}
+                                        className={`${user ? 'cursor-pointer' : ''}`}
+                                        onClick={
+                                            user
+                                                ? () => handleCardClick(candidate.id, position)
+                                                : undefined
+                                        }>
+                                        <CandidateCard
+                                            fullname={candidate.fullname}
+                                            id={candidate.id}
+                                            profile={candidate.profile}
+                                            isSelected={
+                                                selectedCandidates[position] === candidate.id
+                                            }
+                                        />
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })}
+                    </div>
+                </div>
+            ))}
+            <div className="w-full flex justify-center items-center">
+                {user ? (
+                    <Button
+                        className="w-1/2 bg-primary hover:bg-primary-foreground text-white"
+                        onClick={handleSubmit}>
+                        SUBMIT VOTES
+                    </Button>
+                ) : (
+                    <Button
+                        className={
+                            'text-white flex gap-2 font-semibold hover:bg-primary-foreground bg-primary rounded-full py-2 px-5'
+                        }
+                        onClick={RedirectToGoogleSSO}>
+                        <BookOpenCheck />
+                        Log in your institutional email
+                    </Button>
+                )}
             </div>
         </div>
     );
 };
 
-export default candidateByOrg;
+export default CandidateByOrg;
