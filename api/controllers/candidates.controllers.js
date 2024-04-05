@@ -165,49 +165,63 @@ export const getResult = async (req, res) => {
         orgID: orgId,
         orgTitle: orgTitle,
         fullname: candidate.fullname,
+        position: candidate.position,
         voteCounts: candidate.voteCounts,
       };
       acc[candidate.organization._id] = acc[candidate.organization._id] || {
         orgID: orgId,
         orgTitle: orgTitle,
-        candidates: [],
+        positions: {},
       };
-      acc[candidate.organization._id].candidates.push(formattedCandidate);
+      acc[candidate.organization._id].positions[candidate.position] =
+        acc[candidate.organization._id].positions[candidate.position] || [];
+      acc[candidate.organization._id].positions[candidate.position].push(
+        formattedCandidate
+      );
       return acc;
     }, {});
 
-    // Fetch top 3 candidates per organization sorted by voteCounts in descending order
+    // Fetch top 3 candidates per position within each organization
     const topCandidatesByOrganization = {};
-    await Promise.all(
-      Object.keys(candidatesByOrganization).map(async (orgId) => {
-        const topCandidates = await Candidates.find({ organization: orgId })
-          .sort({ voteCounts: -1 })
-          .limit(3)
-          .populate("organization", "title");
-        topCandidatesByOrganization[orgId] = {
-          orgID: orgId,
-          orgTitle: topCandidates[0].organization.title,
-          candidates: topCandidates.map((candidate) => ({
-            orgID: orgId,
-            orgTitle: topCandidates[0].organization.title,
-            fullname: candidate.fullname,
-            voteCounts: candidate.voteCounts,
-          })),
-        };
-      })
-    );
+    for (const orgId in candidatesByOrganization) {
+      topCandidatesByOrganization[orgId] = {
+        orgID: orgId,
+        orgTitle: candidatesByOrganization[orgId].orgTitle,
+        positions: {},
+      };
+      const positions = candidatesByOrganization[orgId].positions;
+      for (const position in positions) {
+        const candidates = positions[position];
+        const topCandidates = candidates
+          .sort((a, b) => b.voteCounts - a.voteCounts)
+          .slice(0, 3);
+        topCandidatesByOrganization[orgId].positions[position] = topCandidates;
+      }
+    }
 
-    // Create an array of data objects for candidatesByOrganization
+    // Format data for candidatesByOrganization
     const candidatesData = Object.values(candidatesByOrganization).map(
-      (orgData) => ({
-        orgID: orgData.orgID,
-        orgTitle: orgData.orgTitle,
-        candidates: orgData.candidates,
+      ({ orgID, orgTitle, positions }) => ({
+        orgID,
+        orgTitle,
+        candidates: Object.entries(positions).map(([position, candidates]) => ({
+          position,
+          candidates,
+        })),
       })
     );
 
-    // Create an array of data objects for topCandidatesByOrganization
-    const topCandidatesData = Object.values(topCandidatesByOrganization);
+    // Format data for topCandidatesByOrganization
+    const topCandidatesData = Object.values(topCandidatesByOrganization).map(
+      ({ orgID, orgTitle, positions }) => ({
+        orgID,
+        orgTitle,
+        candidates: Object.entries(positions).map(([position, candidates]) => ({
+          position,
+          candidates,
+        })),
+      })
+    );
 
     // Respond with the formatted candidates info grouped by organization
     res.json({
