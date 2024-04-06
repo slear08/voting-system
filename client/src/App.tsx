@@ -13,6 +13,13 @@ import CandidatesByID from '@/pages/components/candidates';
 import CandidateByOrg from '@/pages/components/candidates/candidatesByOrg';
 import Authenticated from '@/pages/components/authenticated';
 
+// ADMIN PAGES
+import AdminLayout from '@/layouts/admin';
+import AdminLogin from '@/pages/admin/Login';
+import Main from '@/pages/admin/Main';
+import Results from '@/pages/admin/Results';
+import CandidatesResults from '@/pages/admin/Results/candidates';
+
 function App() {
     const router = createBrowserRouter([
         {
@@ -58,8 +65,46 @@ function App() {
             ]
         },
         {
+            path: '/admin',
+            element: <AdminLayout />,
+            children: [
+                {
+                    path: '',
+                    element: <Main />
+                },
+                {
+                    path: 'dashboard',
+                    element: <Main />
+                },
+                {
+                    path: 'results',
+                    element: <Results />
+                },
+                {
+                    path: 'results/org/:id',
+                    element: <CandidatesResults />
+                },
+                {
+                    path: 'voters',
+                    element: <Main />
+                },
+                {
+                    path: 'candidates',
+                    element: <Main />
+                },
+                {
+                    path: 'organizations',
+                    element: <Main />
+                }
+            ]
+        },
+        {
             path: '/login/success',
             element: <Authenticated />
+        },
+        {
+            path: '/login',
+            element: <AdminLogin />
         }
     ]);
 
