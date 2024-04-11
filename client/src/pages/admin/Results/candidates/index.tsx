@@ -1,8 +1,16 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    Legend,
+    BarElement,
+    Title,
+    Tooltip
+} from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Legend, Title, Tooltip);
 
 const CandidatesResults = () => {
     const candidatesData: any = [
@@ -368,6 +376,7 @@ const CandidatesResults = () => {
                                     data: positionData.candidates.map(
                                         (candidate: any) => candidate.voteCounts
                                     ),
+                                    label: 'Vote Counts',
                                     backgroundColor: positionData.candidates.map(() =>
                                         getRandomColor()
                                     )
