@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
 
 // CLIENT PAGES
 import ClientLayout from '@/layouts/client';
@@ -19,6 +20,8 @@ import AdminLogin from '@/pages/admin/Login';
 import Main from '@/pages/admin/Main';
 import Results from '@/pages/admin/Results';
 import CandidatesResults from '@/pages/admin/Results/candidates';
+import Voters from '@/pages/admin/Voters';
+import CandidatesAdmin from '@/pages/admin/Candidates';
 
 function App() {
     const router = createBrowserRouter([
@@ -86,11 +89,11 @@ function App() {
                 },
                 {
                     path: 'voters',
-                    element: <Main />
+                    element: <Voters />
                 },
                 {
                     path: 'candidates',
-                    element: <Main />
+                    element: <CandidatesAdmin />
                 },
                 {
                     path: 'organizations',
@@ -112,6 +115,7 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
+            <Toaster />
         </QueryClientProvider>
     );
 }
