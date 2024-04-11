@@ -41,7 +41,7 @@ const MAX_FILE_SIZE = 500000;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 export const FormSchema = z.object({
-    file: z.instanceof(FileList),
+    file: z.instanceof(FileList).optional(),
     firstName: z.string().min(1, {
         message: 'This field is required.'
     }),
@@ -202,7 +202,10 @@ export const columns = [
 
             function onSubmit(data: z.infer<typeof FormSchema>) {
                 const formData = new FormData();
-                formData.append('file', data.file[0]);
+
+                if (data.file && data.file[0]) {
+                    formData.append('file', data.file[0]);
+                }
                 formData.append('firstName', data.firstName);
                 formData.append('middleName', data.middleName);
                 formData.append('lastName', data.lastName);

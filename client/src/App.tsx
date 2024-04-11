@@ -22,6 +22,8 @@ import Results from '@/pages/admin/Results';
 import CandidatesResults from '@/pages/admin/Results/candidates';
 import Voters from '@/pages/admin/Voters';
 import CandidatesAdmin from '@/pages/admin/Candidates';
+import OrganizationAdmin from '@/pages/admin/Organization';
+import OrganizationByIDAdmin from '@/pages/admin/components/organization';
 
 function App() {
     const router = createBrowserRouter([
@@ -97,7 +99,16 @@ function App() {
                 },
                 {
                     path: 'organizations',
-                    element: <Main />
+                    children: [
+                        {
+                            path: '',
+                            element: <OrganizationAdmin />
+                        },
+                        {
+                            path: 'org/edit/:id',
+                            element: <OrganizationByIDAdmin />
+                        }
+                    ]
                 }
             ]
         },
