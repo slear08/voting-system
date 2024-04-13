@@ -25,6 +25,7 @@ import CandidatesAdmin from '@/pages/admin/Candidates';
 import OrganizationAdmin from '@/pages/admin/Organization';
 import OrganizationByIDAdmin from '@/pages/admin/components/organization';
 import CreateOrganization from '@/pages/admin/components/organization/create-form';
+import NotFound from '@/pages/404Page';
 
 function App() {
     const router = createBrowserRouter([
@@ -63,10 +64,6 @@ function App() {
                 {
                     path: '/candidates/org/:id',
                     element: <CandidateByOrg />
-                },
-                {
-                    path: '/signin',
-                    element: <Login />
                 }
             ]
         },
@@ -122,8 +119,12 @@ function App() {
             element: <Authenticated />
         },
         {
-            path: '/login',
+            path: '/signin',
             element: <AdminLogin />
+        },
+        {
+            path: '*',
+            element: <NotFound />
         }
     ]);
 
