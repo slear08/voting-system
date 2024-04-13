@@ -47,7 +47,6 @@ const Login = () => {
         });
     }
 
-    console.log(showPassword);
     return (
         <div className="flex h-screen">
             <div className="h-full w-1/2 flex justify-center items-center bg-slate-200">
