@@ -10,12 +10,12 @@ import { toast } from '@/components/ui/use-toast';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useQuery } from '@tanstack/react-query';
-import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
-import { useParams, useNavigate } from 'react-router-dom';
-import { CircleChevronLeft, Save, Trash2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { CircleChevronLeft, Save, Trash2, SquarePlus } from 'lucide-react';
+import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import logo from '@/assets/favicon.png';
 
 const FormSchema = z.object({
     file: z.instanceof(FileList).optional(),
@@ -30,20 +30,20 @@ const FormSchema = z.object({
     })
 });
 
-const OrganizationByIDAdmin = () => {
-    const { id } = useParams();
+const CreateOrganization = () => {
     const navigate = useNavigate();
+    const [imagePreview, setImagePreview] = useState<string>(logo);
 
-    const { data, isLoading } = useQuery({
-        queryFn: () => {
-            if (id) {
-                return GetOrganizationByID(id);
-            }
-            return null;
-        },
-        queryKey: [`organizations-${id}`]
-    });
-    const [value, setValue] = useState('');
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -52,18 +52,8 @@ const OrganizationByIDAdmin = () => {
             title: '',
             info: '',
             content: ''
-        },
-        values: {
-            file: data?.file || undefined,
-            title: data?.title || '',
-            info: data?.info || '',
-            content: data?.content || ''
         }
     });
-
-    if (isLoading) {
-        return <div>loading</div>;
-    }
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         toast({
@@ -86,35 +76,37 @@ const OrganizationByIDAdmin = () => {
                 <CircleChevronLeft className="mr-2" />
                 BACK
             </Button>
+            <div className="mx-5 pt-5">
+                <h1 className="text-3xl font-semibold text-center">CREATE ORGANIZATION</h1>
+            </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg h-[500px] flex gap-5">
                         <div className="w-1/2">
-                            <div className=" overflow-hidden">
-                                <div className="w-full grid place-items-center">
-                                    <Avatar className="w-[200px] h-[200px] border-2 border-primary">
-                                        <AvatarImage src={data?.picture} alt="logo" />
-                                    </Avatar>
-                                </div>
-                                <FormField
-                                    control={form.control}
-                                    name="file"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <Label className="text-white">Upload Image</Label>
-                                            <FormControl>
-                                                <Input
-                                                    type="file"
-                                                    onChange={(e) => {
-                                                        field.onChange(e.target.files);
-                                                    }}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                            <div className="w-full grid place-items-center">
+                                <Avatar className="w-[200px] h-[200px] border-2 border-primary">
+                                    <AvatarImage src={imagePreview} alt="preview" />
+                                </Avatar>
                             </div>
+                            <FormField
+                                control={form.control}
+                                name="file"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <Label className="text-white">Upload Image</Label>
+                                        <FormControl>
+                                            <Input
+                                                type="file"
+                                                onChange={(e) => {
+                                                    field.onChange(e.target.files);
+                                                    handleFileChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="title"
@@ -187,7 +179,6 @@ const OrganizationByIDAdmin = () => {
                                                         value={field.value}
                                                         onChange={(newValue) => {
                                                             field.onChange(newValue);
-                                                            setValue(newValue);
                                                         }}
                                                     />
                                                 </div>
@@ -205,4 +196,4 @@ const OrganizationByIDAdmin = () => {
     );
 };
 
-export default OrganizationByIDAdmin;
+export default CreateOrganization;
