@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import logo from '@/assets/favicon.png';
 
 const FormSchema = z.object({
-    file: z.instanceof(FileList).optional(),
+    file: z.any().refine((files) => files?.length >= 1, { message: 'Image is required.' }),
     title: z.string().min(1, {
         message: 'This field is required.'
     }),
@@ -81,7 +81,7 @@ const CreateOrganization = () => {
             </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg h-[500px] flex gap-5">
+                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg flex gap-5">
                         <div className="w-1/2">
                             <div className="w-full grid place-items-center">
                                 <Avatar className="w-[200px] h-[200px] border-2 border-primary">
@@ -97,6 +97,7 @@ const CreateOrganization = () => {
                                         <FormControl>
                                             <Input
                                                 type="file"
+                                                accept="image/*"
                                                 onChange={(e) => {
                                                     field.onChange(e.target.files);
                                                     handleFileChange(e);
