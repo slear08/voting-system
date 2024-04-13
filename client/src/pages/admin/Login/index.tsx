@@ -17,8 +17,11 @@ import { toast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 
+import { AdminLogin, AdminLogout } from '@/api/services/admin/auth';
+import { useMutation } from '@tanstack/react-query';
+import useAuthStore from '@/store/useAuthStore';
 const FormSchema = z.object({
-    username: z.string().min(1, {
+    email: z.string().min(1, {
         message: 'This field is required'
     }),
     password: z.string().min(1, {
@@ -27,24 +30,37 @@ const FormSchema = z.object({
 });
 
 const Login = () => {
+    const { setAuthenticate } = useAuthStore();
+
+    const { mutate } = useMutation({
+        mutationFn: AdminLogin,
+        onSuccess: () => {
+            setAuthenticate({ isAuthenticated: true });
+            toast({
+                title: 'Login',
+                description: 'Login Successfully'
+            });
+        },
+        onError: (error: any) => {
+            toast({
+                variant: 'destructive',
+                title: 'Login',
+                description: error.response.data.error
+            });
+        }
+    });
+
     const [showPassword, setShowPassword] = useState(false);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            username: '',
+            email: '',
             password: ''
         }
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: 'You submitted the following values:',
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            )
-        });
+        mutate(data);
     }
 
     return (
@@ -59,10 +75,10 @@ const Login = () => {
                         <div className="border border-slate-400 bg-slate-150 p-10 rounded-xl w-[350px]">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>

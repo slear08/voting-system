@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Route for creating a new admin
 router.post("/login", loginAdmin);
-router.get("/admin/logout", logoutAdmin);
+router.post("/admin/logout", logoutAdmin);
 
 router.get("/login/success", authMiddleware, userDetails);
 router.get("/login/google", googleLogin);
