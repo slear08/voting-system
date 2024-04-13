@@ -154,13 +154,7 @@ const CreateOrganization = () => {
                                         variant="outline"
                                         className="hover:bg-primary hover:text-white w-full">
                                         <Save />
-                                        <p>Save changes</p>
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        className="text-white w-full my-5 flex gap-1">
-                                        <Trash2 />
-                                        <p>Delete</p>
+                                        <p>Create Organization</p>
                                     </Button>
                                 </div>
                             </div>
