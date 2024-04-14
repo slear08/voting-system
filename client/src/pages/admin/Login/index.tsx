@@ -15,11 +15,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { AdminLogin, AdminLogout } from '@/api/services/admin/auth';
+import { AdminLogin } from '@/api/services/admin/auth';
 import { useMutation } from '@tanstack/react-query';
 import useAuthStore from '@/store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 const FormSchema = z.object({
     email: z.string().min(1, {
         message: 'This field is required'
@@ -30,7 +31,15 @@ const FormSchema = z.object({
 });
 
 const Login = () => {
-    const { setAuthenticate } = useAuthStore();
+    const { setAuthenticate, isAuthenticated } = useAuthStore();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/admin');
+        }
+    }, [isAuthenticated]);
 
     const { mutate } = useMutation({
         mutationFn: AdminLogin,
