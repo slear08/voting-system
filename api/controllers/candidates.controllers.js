@@ -1,4 +1,5 @@
 import Candidates from "../models/candidates.model.js";
+import Organization from "../models/organizations.model.js";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { upload, storage } from "../middlewares/upload.middleware.js";
 
@@ -16,8 +17,14 @@ export const getAllCandidates = async (req, res) => {
 export const getCandidatesByOrganizationId = async (req, res) => {
   try {
     const { organizationId } = req.params;
-    const candidates = await Candidates.find({ organization: organizationId });
-    res.json(candidates);
+    const candidates = await Candidates.find({
+      organization: organizationId,
+    });
+    const organization = await Organization.findById(organizationId);
+    if (!organization) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+    res.json({ candidates, organization });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
