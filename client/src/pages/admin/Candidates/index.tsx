@@ -44,29 +44,14 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
-import { GET_ALL_CANDIDATES } from '@/api/services/admin/candidates';
+import { GET_ALL_CANDIDATES, CREATE_CANDIDATES } from '@/api/services/admin/candidates';
 import { DataTable } from '@/components/data-table';
 import { columns, FormSchema } from './columns';
 
 import { useState } from 'react';
 const Candidates = () => {
-    const { data, isLoading } = useQuery({
-        queryFn: GET_ALL_CANDIDATES,
-        queryKey: ['candidates'],
-        staleTime: 30000
-    });
-
-    const [selectedRows, setSeletedRows] = useState([]);
-
-    const { data: DataOrg } = useQuery({
-        queryFn: GetAllOranizations,
-        queryKey: ['organizations']
-    });
-
-    const { toast } = useToast();
-
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -81,6 +66,30 @@ const Candidates = () => {
             organization: ''
         }
     });
+
+    const queryClient = useQueryClient();
+    const { data, isLoading } = useQuery({
+        queryFn: GET_ALL_CANDIDATES,
+        queryKey: ['candidates'],
+        staleTime: 30000
+    });
+
+    const { mutate } = useMutation({
+        mutationFn: CREATE_CANDIDATES,
+        onSuccess: () => {
+            form.reset();
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+        }
+    });
+
+    const [selectedRows, setSeletedRows] = useState([]);
+
+    const { data: DataOrg } = useQuery({
+        queryFn: GetAllOranizations,
+        queryKey: ['organizations']
+    });
+
+    const { toast } = useToast();
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const formData = new FormData();
@@ -105,6 +114,7 @@ const Candidates = () => {
             });
         });
 
+        mutate(formData);
         toast({
             title: 'You submitted the following values:',
             description: (

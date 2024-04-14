@@ -23,3 +23,17 @@ export const UPDATE_CANDIDATES = async (data: any) => {
         throw error;
     }
 };
+
+export const CREATE_CANDIDATES = async (data: any) => {
+    try {
+        const response = await axiosInstance.post(`/candidates`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Request error:', error);
+        throw error;
+    }
+};
