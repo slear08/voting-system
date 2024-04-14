@@ -54,7 +54,8 @@ import { useState } from 'react';
 const Candidates = () => {
     const { data, isLoading } = useQuery({
         queryFn: GET_ALL_CANDIDATES,
-        queryKey: ['candidates']
+        queryKey: ['candidates'],
+        staleTime: 30000
     });
 
     const [selectedRows, setSeletedRows] = useState([]);

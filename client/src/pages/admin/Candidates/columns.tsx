@@ -33,12 +33,10 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { GetAllOranizations } from '@/api/services/general/GetOgranization';
 import { Checkbox } from '@/components/ui/checkbox';
-
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { GetAllOranizations } from '@/api/services/general/GetOgranization';
+import { UPDATE_CANDIDATES } from '@/api/services/admin/candidates';
 
 export const FormSchema = z.object({
     file: z.instanceof(FileList).optional(),
@@ -183,6 +181,15 @@ export const columns = [
                 queryKey: ['organizations']
             });
 
+            const queryClient = useQueryClient();
+
+            const { mutate } = useMutation({
+                mutationFn: UPDATE_CANDIDATES,
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ['candidates'] });
+                }
+            });
+
             const { toast } = useToast();
 
             const form = useForm<z.infer<typeof FormSchema>>({
@@ -223,6 +230,7 @@ export const columns = [
                     });
                 });
 
+                mutate({ id: row.original._id, data: formData });
                 toast({
                     title: 'You submitted the following values:',
                     description: (
