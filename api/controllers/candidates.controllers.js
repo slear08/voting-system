@@ -157,14 +157,21 @@ export const updateCandidate = async (req, res) => {
 };
 
 // Controller for deleting a candidate
-export const deleteCandidate = async (req, res) => {
+export const deleteCandidates = async (req, res) => {
+  const { ids } = req.body;
   try {
-    const { id } = req.params;
-    const deletedCandidate = await Candidates.findByIdAndDelete(id);
-    if (!deletedCandidate) {
-      return res.status(404).json({ message: "Candidate not found" });
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: "IDs array is missing or empty" });
     }
-    res.json({ message: "Candidate deleted successfully" });
+
+    const deletedCandidates = await Candidates.deleteMany({
+      _id: { $in: ids },
+    });
+    if (!deletedCandidates || deletedCandidates.deletedCount === 0) {
+      return res.status(404).json({ message: "Candidates not found" });
+    }
+
+    res.json({ message: "Candidates deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

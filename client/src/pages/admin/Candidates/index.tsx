@@ -46,7 +46,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
-import { GET_ALL_CANDIDATES, CREATE_CANDIDATES } from '@/api/services/admin/candidates';
+import {
+    GET_ALL_CANDIDATES,
+    CREATE_CANDIDATES,
+    DELETE_CANDIDATES
+} from '@/api/services/admin/candidates';
 import { DataTable } from '@/components/data-table';
 import { columns, FormSchema } from './columns';
 
@@ -74,10 +78,17 @@ const Candidates = () => {
         staleTime: 30000
     });
 
-    const { mutate } = useMutation({
+    const { mutate: CreateCandidates } = useMutation({
         mutationFn: CREATE_CANDIDATES,
         onSuccess: () => {
             form.reset();
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+        }
+    });
+
+    const { mutate: DeleteCandidates } = useMutation({
+        mutationFn: DELETE_CANDIDATES,
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['candidates'] });
         }
     });
@@ -114,7 +125,7 @@ const Candidates = () => {
             });
         });
 
-        mutate(formData);
+        CreateCandidates(formData);
         toast({
             title: 'You submitted the following values:',
             description: (
@@ -126,6 +137,7 @@ const Candidates = () => {
     }
     function onSubmitDeleteCanditate() {
         console.log(selectedRows);
+        DeleteCandidates({ ids: selectedRows });
     }
 
     if (isLoading) {

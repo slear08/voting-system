@@ -4,7 +4,7 @@ import {
   getCandidatesByOrganizationId,
   createCandidate,
   updateCandidate,
-  deleteCandidate,
+  deleteCandidates,
   getCandidateById,
   getResult,
 } from "../controllers/candidates.controllers.js";
@@ -31,6 +31,6 @@ router.post("/candidates", authAdminMiddleware, createCandidate);
 router.put("/candidates/:id", authAdminMiddleware, updateCandidate);
 
 // Route for deleting a candidate
-router.delete("/candidates/:id", authAdminMiddleware, deleteCandidate);
+router.delete("/candidates", authAdminMiddleware, deleteCandidates);
 
 export default router;

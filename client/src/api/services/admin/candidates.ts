@@ -37,3 +37,13 @@ export const CREATE_CANDIDATES = async (data: any) => {
         throw error;
     }
 };
+
+export const DELETE_CANDIDATES = async (data: any) => {
+    try {
+        const response = await axiosInstance.delete(`/candidates`, { data });
+        return response.data;
+    } catch (error) {
+        console.error('Request error:', error);
+        throw error;
+    }
+};
