@@ -120,6 +120,20 @@ export const updateCandidate = async (req, res) => {
           updateData.profile = downloadURL;
         }
 
+        if (
+          Array.isArray(updateData.achievements) &&
+          updateData.achievements[0] === ""
+        ) {
+          updateData.achievements = [];
+        }
+
+        if (
+          Array.isArray(updateData.platforms) &&
+          updateData.platforms[0] === ""
+        ) {
+          updateData.platforms = [];
+        }
+
         const updatedCandidate = await Candidates.findByIdAndUpdate(
           id,
           updateData,

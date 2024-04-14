@@ -219,18 +219,27 @@ export const columns = [
                 formData.append('suffixName', data.suffixName);
                 formData.append('position', data.position);
                 formData.append('organization', data.organization);
-                data.platforms.forEach(function (obj: any, index: any) {
-                    Object.keys(obj).forEach(function (key: any) {
-                        formData.append('platforms[' + index + '][' + key + ']', obj[key]);
+                if (data.platforms.length !== 0) {
+                    data.platforms.forEach(function (obj: any, index: any) {
+                        Object.keys(obj).forEach(function (key: any) {
+                            formData.append('platforms[' + index + '][' + key + ']', obj[key]);
+                        });
                     });
-                });
-                data.achievements.forEach(function (obj: any, index: any) {
-                    Object.keys(obj).forEach(function (key: any) {
-                        formData.append('achievements[' + index + '][' + key + ']', obj[key]);
+                } else {
+                    formData.append('platforms[]', '');
+                }
+                if (data.achievements.length !== 0) {
+                    data.achievements.forEach(function (obj: any, index: any) {
+                        Object.keys(obj).forEach(function (key: any) {
+                            formData.append('achievements[' + index + '][' + key + ']', obj[key]);
+                        });
                     });
-                });
+                } else {
+                    formData.append('achievements[]', '');
+                }
 
                 mutate({ id: row.original._id, data: formData });
+
                 toast({
                     title: 'You submitted the following values:',
                     description: (
