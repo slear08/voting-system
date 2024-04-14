@@ -1,135 +1,24 @@
 import { CircleUser, AreaChart } from 'lucide-react';
-
+import { useQuery } from '@tanstack/react-query';
+import { GET_RESULTS, GET_STATS } from '@/api/services/admin/results';
 const Main = () => {
     // Sample data
-    const topCandidatesByOrganization = {
-        candidatesByOrganization: [
-            {
-                orgID: '65f857e441b1007e56291a0d',
-                orgTitle: 'Organization 1',
-                candidates: [
-                    {
-                        position: 'President',
-                        candidates: [
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Test Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 3
-                            },
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Test 2 Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 0
-                            }
-                        ]
-                    },
-                    {
-                        position: 'Vice President',
-                        candidates: [
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Person Sarah Duterte Jr',
-                                position: 'Vice President',
-                                voteCounts: 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                orgID: '65fac7a877c347d9906e7f1b',
-                orgTitle: 'Organization 2',
-                candidates: [
-                    {
-                        position: 'President',
-                        candidates: [
-                            {
-                                orgID: '65fac7a877c347d9906e7f1b',
-                                orgTitle: 'Organization 2',
-                                fullname: 'Candidate  Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        topCandidatesByOrganization: [
-            {
-                orgID: '65f857e441b1007e56291a0d',
-                orgTitle: 'Organization 1',
-                candidates: [
-                    {
-                        position: 'President',
-                        candidates: [
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Test Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 3
-                            },
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Test 2 Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 0
-                            },
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Test 2 Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 0
-                            }
-                        ]
-                    },
-                    {
-                        position: 'Vice President',
-                        candidates: [
-                            {
-                                orgID: '65f857e441b1007e56291a0d',
-                                orgTitle: 'Organization 1',
-                                fullname: 'Person Sarah Duterte Jr',
-                                position: 'Vice President',
-                                voteCounts: 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                orgID: '65fac7a877c347d9906e7f1b',
-                orgTitle: 'Organization 2',
-                candidates: [
-                    {
-                        position: 'President',
-                        candidates: [
-                            {
-                                orgID: '65fac7a877c347d9906e7f1b',
-                                orgTitle: 'Organization 2',
-                                fullname: 'Candidate  Doe Smith Jr',
-                                position: 'President',
-                                voteCounts: 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
+    const { data: results } = useQuery({
+        queryFn: GET_RESULTS,
+        queryKey: ['results'],
+        staleTime: 30000
+    });
+
+    const { data: stats } = useQuery({
+        queryFn: GET_STATS,
+        queryKey: ['stats'],
+        staleTime: 30000
+    });
 
     function getCandidatesByOrganization(data: any) {
         const candidatesByOrganization: any = {};
 
-        data.forEach((org: any) => {
+        data?.forEach((org: any) => {
             org.candidates.forEach((position: any) => {
                 const candidates = position.candidates.map((candidate: any) => ({
                     fullname: candidate.fullname,
@@ -157,9 +46,7 @@ const Main = () => {
         return organizations;
     }
 
-    const candidatesByOrg = getCandidatesByOrganization(
-        topCandidatesByOrganization.topCandidatesByOrganization
-    );
+    const candidatesByOrg = getCandidatesByOrganization(results?.topCandidatesByOrganization);
 
     return (
         <div>
@@ -172,14 +59,14 @@ const Main = () => {
                             <CircleUser />
                             <h1>Registered Users</h1>
                         </div>
-                        <h1 className="font-bold text-3xl">500 users</h1>
+                        <h1 className="font-bold text-3xl">{stats?.totalVoters} users</h1>
                     </div>
                     <div className="flex flex-col justify-center items-center bg-primary p-5 text-white rounded-lg w-[300px]">
                         <div className="flex gap-2 items-center text-xl">
                             <AreaChart />
                             <h1>Total Votes</h1>
                         </div>
-                        <h1 className="font-bold text-3xl">500 votes</h1>
+                        <h1 className="font-bold text-3xl">{stats?.totalVoted} votes</h1>
                     </div>
                 </div>
             </div>
