@@ -68,7 +68,7 @@ const OrganizationByIDAdmin = () => {
         }
     });
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading }: any = useQuery({
         queryFn: () => {
             if (id) {
                 return GetOrganizationByID(id);
@@ -124,7 +124,7 @@ const OrganizationByIDAdmin = () => {
             </Button>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg h-[500px] flex gap-5">
+                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg  flex gap-5">
                         <div className="w-1/2">
                             <div className=" overflow-hidden">
                                 <div className="w-full grid place-items-center">
@@ -246,7 +246,7 @@ const OrganizationByIDAdmin = () => {
                                                 <Label className="text-white">Content</Label>
                                                 <div className="w-full text-center m-2">
                                                     <ReactQuill
-                                                        className="w-full text-white"
+                                                        className="w-full text-white "
                                                         theme="snow"
                                                         value={field.value}
                                                         onChange={(newValue) => {

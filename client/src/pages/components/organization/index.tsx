@@ -48,9 +48,10 @@ const OrganizationByID = () => {
                         <h1 className="text-lg text-white font-semibold">{data?.info}</h1>
                     </div>
                 </div>
-                <div className="text-lg text-white w-1/2">
-                    <p>{data?.content}</p>
-                </div>
+                <div
+                    className="rich-text text-lg text-white w-1/2"
+                    dangerouslySetInnerHTML={{ __html: data?.content }}
+                />
             </div>
         </div>
     );
