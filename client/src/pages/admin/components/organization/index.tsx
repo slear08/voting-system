@@ -7,11 +7,22 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { UPDATE_ORGANIZATION } from '@/api/services/admin/organizations';
+import { UPDATE_ORGANIZATION, DELETE_ORGANIZATION } from '@/api/services/admin/organizations';
 
 import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -42,6 +53,17 @@ const OrganizationByIDAdmin = () => {
             toast({
                 title: 'Update Organization',
                 description: 'Organization Successfully Update'
+            });
+        }
+    });
+
+    const { mutate: DeleteOrganization } = useMutation({
+        mutationFn: DELETE_ORGANIZATION,
+        onSuccess: () => {
+            navigate('/admin/organizations');
+            toast({
+                title: 'Delete Organization',
+                description: 'Organization Successfully Deleted'
             });
         }
     });
@@ -180,12 +202,38 @@ const OrganizationByIDAdmin = () => {
                                         <Save />
                                         <p>Save changes</p>
                                     </Button>
-                                    <Button
-                                        type="button"
-                                        className="text-white w-full my-5 flex gap-1">
-                                        <Trash2 />
-                                        <p>Delete</p>
-                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                className="text-white w-full my-5 flex gap-1">
+                                                <Trash2 />
+                                                <p>Delete</p>
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    Are you absolutely sure?
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    This action cannot be undone. This will
+                                                    permanently delete the organization and remove
+                                                    data from server.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    className="text-white"
+                                                    onClick={() => {
+                                                        DeleteOrganization(id);
+                                                    }}>
+                                                    Continue
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </div>
                             <FormField

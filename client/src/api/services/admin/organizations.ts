@@ -27,3 +27,13 @@ export const UPDATE_ORGANIZATION = async (data: any) => {
         throw error;
     }
 };
+
+export const DELETE_ORGANIZATION = async (data: any) => {
+    try {
+        const response = await axiosInstance.delete(`/organizations/${data}`);
+        return response.data;
+    } catch (error) {
+        console.error('Request error:', error);
+        throw error;
+    }
+};
