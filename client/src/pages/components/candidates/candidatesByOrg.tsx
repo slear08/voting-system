@@ -22,6 +22,7 @@ const CandidateByOrg = () => {
         },
         queryKey: [`candidates-org-${id}`]
     });
+
     const { data: Organization } = useQuery({
         queryFn: () => {
             if (id) {
@@ -53,7 +54,7 @@ const CandidateByOrg = () => {
         return <div>Loading</div>;
     }
 
-    if (!data || data.length === 0) {
+    if (!data || data?.candidates?.length === 0) {
         return (
             <div className="flex justify-center h-screen">
                 <div>
@@ -61,14 +62,23 @@ const CandidateByOrg = () => {
                     <h1 className="text-4xl text-center font-semibold text-primary">
                         {Organization?.title}
                     </h1>
-                    <h1 className="font-bold text-5xl text-slate-800 mt-40">No Candidates</h1>
+                    <div className="flex flex-col gap-10">
+                        <h1 className="font-bold text-5xl text-slate-800 mt-40">No Candidates</h1>
+                        <Button
+                            className="mx-5 rounded-full text-white hover:bg-primary-foreground"
+                            onClick={() => {
+                                navigate(-1);
+                            }}>
+                            GO BACK
+                        </Button>
+                    </div>
                 </div>
             </div>
         );
     }
 
     const candidatePositions = Array.from(
-        new Set(data.map((candidate: any) => candidate.position))
+        new Set(data?.candidates?.map((candidate: any) => candidate.position))
     );
 
     return (
@@ -92,7 +102,7 @@ const CandidateByOrg = () => {
                         <h1>CANDIDATES FOR {position.toUpperCase()}</h1>
                     </div>
                     <div className="grid grid-cols-4 gap-4">
-                        {data.map((candidate: any) => {
+                        {data?.candidates?.map((candidate: any) => {
                             if (candidate.position === position) {
                                 return (
                                     <div
