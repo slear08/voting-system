@@ -13,8 +13,12 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-
+import { useMutation } from '@tanstack/react-query';
+import { AdminLogout } from '@/api/services/admin/auth';
+import useAuthStore from '@/store/useAuthStore';
 const Sidebar = () => {
+    const { logout } = useAuthStore();
+    const { mutate: MutateLogOut } = useMutation({ mutationFn: AdminLogout });
     return (
         <div className="bg-slate-200 h-screen p-5">
             <div className="p-10">
@@ -137,7 +141,30 @@ const Sidebar = () => {
                         </div>
                     </div>
                     <div className="w-full">
-                        <Button className="w-full text-white">LOGOUT</Button>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button className="w-full text-white">LOGOUT</Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        You want to logout?
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="text-white"
+                                        onClick={() => {
+                                            MutateLogOut();
+                                            logout();
+                                        }}>
+                                        Continue
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </div>
             </div>
