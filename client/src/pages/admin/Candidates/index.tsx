@@ -136,7 +136,6 @@ const Candidates = () => {
         });
     }
     function onSubmitDeleteCanditate() {
-        console.log(selectedRows);
         DeleteCandidates({ ids: selectedRows });
     }
 

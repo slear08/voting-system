@@ -10,12 +10,14 @@ import { toast } from '@/components/ui/use-toast';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { UPDATE_ORGANIZATION } from '@/api/services/admin/organizations';
+
 import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircleChevronLeft, Save, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 const FormSchema = z.object({
     file: z.instanceof(FileList).optional(),
@@ -33,6 +35,16 @@ const FormSchema = z.object({
 const OrganizationByIDAdmin = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const { mutate: updateOrganization } = useMutation({
+        mutationFn: UPDATE_ORGANIZATION,
+        onSuccess: () => {
+            toast({
+                title: 'Update Organization',
+                description: 'Organization Successfully Update'
+            });
+        }
+    });
 
     const { data, isLoading } = useQuery({
         queryFn: () => {
@@ -66,14 +78,16 @@ const OrganizationByIDAdmin = () => {
     }
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: 'You submitted the following values:',
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            )
-        });
+        const formData = new FormData();
+
+        if (data.file && data.file[0]) {
+            formData.append('file', data.file[0]);
+        }
+        formData.append('title', data.title);
+        formData.append('info', data.info);
+        formData.append('content', data.content);
+
+        updateOrganization({ id, data: formData });
     }
 
     return (
@@ -104,7 +118,9 @@ const OrganizationByIDAdmin = () => {
                                             <Label className="text-white">Upload Image</Label>
                                             <FormControl>
                                                 <Input
+                                                    className="text-white"
                                                     type="file"
+                                                    accept="image/*"
                                                     onChange={(e) => {
                                                         field.onChange(e.target.files);
                                                     }}

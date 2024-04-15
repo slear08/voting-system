@@ -11,8 +11,9 @@ import { toast } from '@/components/ui/use-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useMutation } from '@tanstack/react-query';
+import { CREATE_ORGANIZATION } from '@/api/services/admin/organizations';
 import { useNavigate } from 'react-router-dom';
-import { CircleChevronLeft, Save, Trash2, SquarePlus } from 'lucide-react';
+import { CircleChevronLeft, Save } from 'lucide-react';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import logo from '@/assets/favicon.png';
@@ -32,6 +33,7 @@ const FormSchema = z.object({
 
 const CreateOrganization = () => {
     const navigate = useNavigate();
+
     const [imagePreview, setImagePreview] = useState<string>(logo);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,15 +57,28 @@ const CreateOrganization = () => {
         }
     });
 
+    const { mutate: createOrganization } = useMutation({
+        mutationFn: CREATE_ORGANIZATION,
+        onSuccess: () => {
+            form.reset();
+            toast({
+                title: 'Create Organization',
+                description: 'Organization Successfully Created'
+            });
+        }
+    });
+
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: 'You submitted the following values:',
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            )
-        });
+        const formData = new FormData();
+
+        if (data.file && data.file[0]) {
+            formData.append('file', data.file[0]);
+        }
+        formData.append('title', data.title);
+        formData.append('info', data.info);
+        formData.append('content', data.content);
+
+        createOrganization(formData);
     }
 
     return (
@@ -96,6 +111,7 @@ const CreateOrganization = () => {
                                         <Label className="text-white">Upload Image</Label>
                                         <FormControl>
                                             <Input
+                                                className="text-white"
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={(e) => {
