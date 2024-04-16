@@ -27,6 +27,7 @@ import OrganizationByIDAdmin from '@/pages/admin/components/organization';
 import CreateOrganization from '@/pages/admin/components/organization/create-form';
 import NotFound from '@/pages/404Page';
 import AuthenticatedRoute from '@/components/auth';
+import SystemResetPreload from '@/pages/components/system-reset-preload';
 
 function App() {
     const router = createBrowserRouter([
@@ -79,6 +80,10 @@ function App() {
                         {
                             path: '',
                             element: <Main />
+                        },
+                        {
+                            path: 'reset',
+                            element: <SystemResetPreload />
                         },
                         {
                             path: 'dashboard',
