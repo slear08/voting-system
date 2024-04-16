@@ -26,7 +26,7 @@ const Results = () => {
                 <h1 className="font-bold text-5xl text-slate-800 mb-2">Select Organization</h1>
                 <p>By selecting organization, you will see the analytics or graphs</p>
             </div>
-            <div className="mx-auto px-10 py-10">
+            <div className="mx-auto py-10">
                 <div className="grid grid-cols-3 gap-4">
                     {data?.map((data: any, key: any) => (
                         <OrganizationCard
