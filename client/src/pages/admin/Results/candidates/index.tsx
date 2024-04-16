@@ -1,341 +1,45 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    Legend,
-    BarElement,
-    Title,
-    Tooltip
-} from 'chart.js';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { GetCandidatesByOrgID } from '@/api/services/general/GetCandidate';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Legend, Title, Tooltip);
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 const CandidatesResults = () => {
-    const candidatesData: any = [
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 3,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 3,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 3,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 1,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 2,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 5,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 3,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65fad9974f77354e439f22db',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fwallpaper.jpg?alt=media&token=a07d494b-6695-4a1a-8ed0-83207d5da92f',
-            firstName: 'Test 2',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 9,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-20T12:41:59.919Z',
-            updatedAt: '2024-03-20T12:41:59.919Z',
-            __v: 0,
-            fullname: 'Test 2 Doe Smith Jr',
-            id: '65fad9974f77354e439f22db'
-        },
-        {
-            _id: '65fe38ff5f43666e99c5abab',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9ff04628-b93a-4044-a950-10260594255e',
-            firstName: 'Person',
-            middleName: 'Sarah',
-            lastName: 'Duterte',
-            suffixName: 'Jr',
-            voteCounts: 10,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'Vice President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-23T02:05:51.702Z',
-            updatedAt: '2024-03-23T02:05:51.702Z',
-            __v: 0,
-            fullname: 'Person Sarah Duterte Jr',
-            id: '65fe38ff5f43666e99c5abab'
-        },
-        {
-            _id: '65fe38ff5f43666e99c5abab',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9ff04628-b93a-4044-a950-10260594255e',
-            firstName: 'Person',
-            middleName: 'Sarah',
-            lastName: 'Duterte',
-            suffixName: 'Jr',
-            voteCounts: 20,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'Vice President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-23T02:05:51.702Z',
-            updatedAt: '2024-03-23T02:05:51.702Z',
-            __v: 0,
-            fullname: 'Person Sarah Duterte Jr',
-            id: '65fe38ff5f43666e99c5abab'
-        },
-        {
-            _id: '65fe38ff5f43666e99c5abab',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9ff04628-b93a-4044-a950-10260594255e',
-            firstName: 'Person',
-            middleName: 'Sarah',
-            lastName: 'Duterte',
-            suffixName: 'Jr',
-            voteCounts: 6,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'Vice President',
-            organization: '65f857e441b1007e56291a0d',
-            createdAt: '2024-03-23T02:05:51.702Z',
-            updatedAt: '2024-03-23T02:05:51.702Z',
-            __v: 0,
-            fullname: 'Person Sarah Duterte Jr',
-            id: '65fe38ff5f43666e99c5abab'
-        }
-    ];
+    const { id }: any = useParams();
 
-    const groupedCandidates = candidatesData.reduce((acc: any, candidate: any) => {
+    const {
+        data: candidatesData,
+        isLoading,
+        isError
+    } = useQuery({
+        queryFn: () => GetCandidatesByOrgID(id),
+        queryKey: [`candidate-by-org-${id}`],
+        staleTime: 30000
+    });
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error fetching data</div>;
+    }
+
+    if (!candidatesData || candidatesData.candidates.length === 0) {
+        return (
+            <div className="grid place-items-center gap-10 mt-20">
+                <h1 className="text-center text-5xl uppercase">
+                    {candidatesData?.organization?.title}
+                </h1>
+                <h1 className="text-3xl font-semibold">No candidate data available</h1>
+            </div>
+        );
+    }
+
+    const groupedCandidates = candidatesData?.candidates?.reduce((acc: any, candidate: any) => {
         const { position, fullname, voteCounts } = candidate;
         if (!acc[position]) {
             acc[position] = [];
@@ -359,9 +63,12 @@ const CandidatesResults = () => {
 
     return (
         <div className="flex flex-col gap-24">
+            <h1 className="text-center text-5xl uppercase">
+                {candidatesData?.organization?.title}
+            </h1>
             {transformedData.map((positionData: any, index: any) => (
                 <div key={index} style={{ width: '99%' }}>
-                    <div className="text-4xl text-primary font-semibold">{`GRAPH FOR ${positionData.position.toUpperCase()}`}</div>
+                    <div className="text-3xl text-primary font-semibold">{`GRAPH FOR ${positionData.position.toUpperCase()}`}</div>
                     <Bar
                         options={{
                             indexAxis: 'y',

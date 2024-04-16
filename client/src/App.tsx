@@ -24,6 +24,9 @@ import Voters from '@/pages/admin/Voters';
 import CandidatesAdmin from '@/pages/admin/Candidates';
 import OrganizationAdmin from '@/pages/admin/Organization';
 import OrganizationByIDAdmin from '@/pages/admin/components/organization';
+import CreateOrganization from '@/pages/admin/components/organization/create-form';
+import NotFound from '@/pages/404Page';
+import AuthenticatedRoute from '@/components/auth';
 
 function App() {
     const router = createBrowserRouter([
@@ -62,10 +65,6 @@ function App() {
                 {
                     path: '/candidates/org/:id',
                     element: <CandidateByOrg />
-                },
-                {
-                    path: '/signin',
-                    element: <Login />
                 }
             ]
         },
@@ -75,38 +74,48 @@ function App() {
             children: [
                 {
                     path: '',
-                    element: <Main />
-                },
-                {
-                    path: 'dashboard',
-                    element: <Main />
-                },
-                {
-                    path: 'results',
-                    element: <Results />
-                },
-                {
-                    path: 'results/org/:id',
-                    element: <CandidatesResults />
-                },
-                {
-                    path: 'voters',
-                    element: <Voters />
-                },
-                {
-                    path: 'candidates',
-                    element: <CandidatesAdmin />
-                },
-                {
-                    path: 'organizations',
+                    element: <AuthenticatedRoute />,
                     children: [
                         {
                             path: '',
-                            element: <OrganizationAdmin />
+                            element: <Main />
                         },
                         {
-                            path: 'org/edit/:id',
-                            element: <OrganizationByIDAdmin />
+                            path: 'dashboard',
+                            element: <Main />
+                        },
+                        {
+                            path: 'results',
+                            element: <Results />
+                        },
+                        {
+                            path: 'results/org/:id',
+                            element: <CandidatesResults />
+                        },
+                        {
+                            path: 'voters',
+                            element: <Voters />
+                        },
+                        {
+                            path: 'candidates',
+                            element: <CandidatesAdmin />
+                        },
+                        {
+                            path: 'organizations',
+                            children: [
+                                {
+                                    path: '',
+                                    element: <OrganizationAdmin />
+                                },
+                                {
+                                    path: 'org/edit/:id',
+                                    element: <OrganizationByIDAdmin />
+                                },
+                                {
+                                    path: 'org/create',
+                                    element: <CreateOrganization />
+                                }
+                            ]
                         }
                     ]
                 }
@@ -117,8 +126,12 @@ function App() {
             element: <Authenticated />
         },
         {
-            path: '/login',
+            path: '/signin',
             element: <AdminLogin />
+        },
+        {
+            path: '*',
+            element: <NotFound />
         }
     ]);
 

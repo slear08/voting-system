@@ -1,4 +1,5 @@
 import Candidates from "../models/candidates.model.js";
+import Organization from "../models/organizations.model.js";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { upload, storage } from "../middlewares/upload.middleware.js";
 
@@ -16,8 +17,14 @@ export const getAllCandidates = async (req, res) => {
 export const getCandidatesByOrganizationId = async (req, res) => {
   try {
     const { organizationId } = req.params;
-    const candidates = await Candidates.find({ organization: organizationId });
-    res.json(candidates);
+    const candidates = await Candidates.find({
+      organization: organizationId,
+    });
+    const organization = await Organization.findById(organizationId);
+    if (!organization) {
+      return res.status(404).json({ message: "Organization not found" });
+    }
+    res.json({ candidates, organization });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -113,6 +120,20 @@ export const updateCandidate = async (req, res) => {
           updateData.profile = downloadURL;
         }
 
+        if (
+          Array.isArray(updateData.achievements) &&
+          updateData.achievements[0] === ""
+        ) {
+          updateData.achievements = [];
+        }
+
+        if (
+          Array.isArray(updateData.platforms) &&
+          updateData.platforms[0] === ""
+        ) {
+          updateData.platforms = [];
+        }
+
         const updatedCandidate = await Candidates.findByIdAndUpdate(
           id,
           updateData,
@@ -136,14 +157,21 @@ export const updateCandidate = async (req, res) => {
 };
 
 // Controller for deleting a candidate
-export const deleteCandidate = async (req, res) => {
+export const deleteCandidates = async (req, res) => {
+  const { ids } = req.body;
   try {
-    const { id } = req.params;
-    const deletedCandidate = await Candidates.findByIdAndDelete(id);
-    if (!deletedCandidate) {
-      return res.status(404).json({ message: "Candidate not found" });
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: "IDs array is missing or empty" });
     }
-    res.json({ message: "Candidate deleted successfully" });
+
+    const deletedCandidates = await Candidates.deleteMany({
+      _id: { $in: ids },
+    });
+    if (!deletedCandidates || deletedCandidates.deletedCount === 0) {
+      return res.status(404).json({ message: "Candidates not found" });
+    }
+
+    res.json({ message: "Candidates deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

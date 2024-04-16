@@ -70,7 +70,7 @@ const About = () => {
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
                                 src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="CEO"
+                                alt="JOEVENEL EURANGO JR."
                             />
                         </div>
                         <div className="flex-1 flex flex-col gap-5">
@@ -78,7 +78,6 @@ const About = () => {
                                 <p className="text-xl font-semibold text-primary">
                                     JOEVENEL EURANGO JR.
                                 </p>
-                                <p className="text-xl font-semibold">CEO</p>
                             </div>
                             <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem
@@ -115,7 +114,7 @@ const About = () => {
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
                                 src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="CEO"
+                                alt="EDMAR DE GUZMAN"
                             />
                         </div>
                         <div className="flex-1 flex flex-col gap-5">
@@ -123,7 +122,6 @@ const About = () => {
                                 <p className="text-xl font-semibold text-primary">
                                     EDMAR DE GUZMAN
                                 </p>
-                                <p className="text-xl font-semibold">COO</p>
                             </div>
                             <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem
@@ -160,13 +158,12 @@ const About = () => {
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
                                 src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                alt="CEO"
+                                alt="BIEN AGUIRE"
                             />
                         </div>
                         <div className="flex-1 flex flex-col gap-5">
                             <div>
                                 <p className="text-xl font-semibold text-primary">BIEN AGUIRE</p>
-                                <p className="text-xl font-semibold">VP OF FINANCE</p>
                             </div>
                             <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem

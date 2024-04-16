@@ -33,12 +33,10 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { GetAllOranizations } from '@/api/services/general/GetOgranization';
 import { Checkbox } from '@/components/ui/checkbox';
-
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { GetAllOranizations } from '@/api/services/general/GetOgranization';
+import { UPDATE_CANDIDATES } from '@/api/services/admin/candidates';
 
 export const FormSchema = z.object({
     file: z.instanceof(FileList).optional(),
@@ -183,6 +181,15 @@ export const columns = [
                 queryKey: ['organizations']
             });
 
+            const queryClient = useQueryClient();
+
+            const { mutate } = useMutation({
+                mutationFn: UPDATE_CANDIDATES,
+                onSuccess: () => {
+                    queryClient.invalidateQueries({ queryKey: ['candidates'] });
+                }
+            });
+
             const { toast } = useToast();
 
             const form = useForm<z.infer<typeof FormSchema>>({
@@ -212,16 +219,26 @@ export const columns = [
                 formData.append('suffixName', data.suffixName);
                 formData.append('position', data.position);
                 formData.append('organization', data.organization);
-                data.platforms.forEach(function (obj: any, index: any) {
-                    Object.keys(obj).forEach(function (key: any) {
-                        formData.append('platforms[' + index + '][' + key + ']', obj[key]);
+                if (data.platforms.length !== 0) {
+                    data.platforms.forEach(function (obj: any, index: any) {
+                        Object.keys(obj).forEach(function (key: any) {
+                            formData.append('platforms[' + index + '][' + key + ']', obj[key]);
+                        });
                     });
-                });
-                data.achievements.forEach(function (obj: any, index: any) {
-                    Object.keys(obj).forEach(function (key: any) {
-                        formData.append('achievements[' + index + '][' + key + ']', obj[key]);
+                } else {
+                    formData.append('platforms[]', '');
+                }
+                if (data.achievements.length !== 0) {
+                    data.achievements.forEach(function (obj: any, index: any) {
+                        Object.keys(obj).forEach(function (key: any) {
+                            formData.append('achievements[' + index + '][' + key + ']', obj[key]);
+                        });
                     });
-                });
+                } else {
+                    formData.append('achievements[]', '');
+                }
+
+                mutate({ id: row.original._id, data: formData });
 
                 toast({
                     title: 'You submitted the following values:',

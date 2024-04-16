@@ -1,8 +1,11 @@
 import OrganizationCard from '@/components/cards/organization-card';
 import { useQuery } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
-
+import { Button } from '@/components/ui/button';
+import { SquarePlus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const Organization = () => {
+    const navigate = useNavigate();
     const { data, isLoading } = useQuery({
         queryFn: GetAllOranizations,
         queryKey: ['organizations']
@@ -25,6 +28,14 @@ const Organization = () => {
             <div className="text-center">
                 <h1 className="font-bold text-5xl text-slate-800 mb-2">Select Organization</h1>
                 <p>You can edit and delete the organization by selecting it</p>
+                <p>OR</p>
+                <Button
+                    onClick={() => navigate('org/create')}
+                    variant="outline"
+                    className="hover:bg-primary hover:text-white">
+                    <SquarePlus />
+                    <p>Create Organization</p>
+                </Button>
             </div>
             <div className="mx-auto px-10 py-10">
                 <div className="grid grid-cols-3 gap-4">

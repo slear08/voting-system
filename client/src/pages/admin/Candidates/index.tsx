@@ -44,178 +44,18 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
-
+import {
+    GET_ALL_CANDIDATES,
+    CREATE_CANDIDATES,
+    DELETE_CANDIDATES
+} from '@/api/services/admin/candidates';
 import { DataTable } from '@/components/data-table';
 import { columns, FormSchema } from './columns';
 
 import { useState } from 'react';
 const Candidates = () => {
-    const data: any = [
-        {
-            _id: '65facb66017289a8aa96a538',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9f336711-468e-4864-9e27-d924464e7bb7',
-            firstName: 'Test',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 3,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: {
-                _id: '65f857e441b1007e56291a0d',
-                picture:
-                    'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Forganization-profile%2Fwallpaper.jpg?alt=media&token=66731c29-8174-48d1-b12a-c91dbb83b8cc',
-                title: 'Organization 1',
-                info: 'test info',
-                createdAt: '2024-03-18T15:04:04.216Z',
-                updatedAt: '2024-03-20T16:48:35.272Z',
-                __v: 0
-            },
-            createdAt: '2024-03-20T11:41:26.999Z',
-            updatedAt: '2024-03-21T21:27:31.317Z',
-            __v: 0,
-            fullname: 'Test Doe Smith Jr',
-            id: '65facb66017289a8aa96a538'
-        },
-        {
-            _id: '65fad9974f77354e439f22db',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fwallpaper.jpg?alt=media&token=a07d494b-6695-4a1a-8ed0-83207d5da92f',
-            firstName: 'Test 2',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 0,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: {
-                _id: '65f857e441b1007e56291a0d',
-                picture:
-                    'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Forganization-profile%2Fwallpaper.jpg?alt=media&token=66731c29-8174-48d1-b12a-c91dbb83b8cc',
-                title: 'Organization 1',
-                info: 'test info',
-                createdAt: '2024-03-18T15:04:04.216Z',
-                updatedAt: '2024-03-20T16:48:35.272Z',
-                __v: 0
-            },
-            createdAt: '2024-03-20T12:41:59.919Z',
-            updatedAt: '2024-03-20T12:41:59.919Z',
-            __v: 0,
-            fullname: 'Test 2 Doe Smith Jr',
-            id: '65fad9974f77354e439f22db'
-        },
-        {
-            _id: '65fb1dfe11ef1e4adeaa0ce1',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fwallpaper.jpg?alt=media&token=1e2216fa-f0bf-4bff-92b7-62970d78b146',
-            firstName: 'Candidate ',
-            middleName: 'Doe',
-            lastName: 'Smith',
-            suffixName: 'Jr',
-            voteCounts: 1,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'President',
-            organization: {
-                _id: '65fac7a877c347d9906e7f1b',
-                picture:
-                    'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Forganization-profile%2Fwallpaper.jpg?alt=media&token=af30cec6-9e98-4778-8e53-8d163aa402d2',
-                title: 'Organization 2',
-                info: 'test info',
-                createdAt: '2024-03-20T11:25:28.156Z',
-                updatedAt: '2024-03-20T16:50:42.183Z',
-                __v: 0
-            },
-            createdAt: '2024-03-20T17:33:50.439Z',
-            updatedAt: '2024-03-20T17:40:41.334Z',
-            __v: 0,
-            fullname: 'Candidate  Doe Smith Jr',
-            id: '65fb1dfe11ef1e4adeaa0ce1'
-        },
-        {
-            _id: '65fe38ff5f43666e99c5abab',
-            profile:
-                'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Fcandidate-profile%2Fslear.jpg?alt=media&token=9ff04628-b93a-4044-a950-10260594255e',
-            firstName: 'Person',
-            middleName: 'Sarah',
-            lastName: 'Duterte',
-            suffixName: 'Jr',
-            voteCounts: 0,
-            platforms: [
-                {
-                    title: 'Platform Title 1',
-                    info: 'Platform Info 2'
-                }
-            ],
-            achievements: [
-                {
-                    title: 'Achievement Title 1',
-                    info: 'Achievement Title 1'
-                }
-            ],
-            position: 'Vice President',
-            organization: {
-                _id: '65f857e441b1007e56291a0d',
-                picture:
-                    'https://firebasestorage.googleapis.com/v0/b/nexum-5d0f6.appspot.com/o/voting-system%2Forganization-profile%2Fwallpaper.jpg?alt=media&token=66731c29-8174-48d1-b12a-c91dbb83b8cc',
-                title: 'Organization 1',
-                info: 'test info',
-                createdAt: '2024-03-18T15:04:04.216Z',
-                updatedAt: '2024-03-20T16:48:35.272Z',
-                __v: 0
-            },
-            createdAt: '2024-03-23T02:05:51.702Z',
-            updatedAt: '2024-03-23T02:05:51.702Z',
-            __v: 0,
-            fullname: 'Person Sarah Duterte Jr',
-            id: '65fe38ff5f43666e99c5abab'
-        }
-    ];
-
-    const [selectedRows, setSeletedRows] = useState([]);
-
-    const { data: DataOrg } = useQuery({
-        queryFn: GetAllOranizations,
-        queryKey: ['organizations']
-    });
-
-    const { toast } = useToast();
-
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -230,6 +70,37 @@ const Candidates = () => {
             organization: ''
         }
     });
+
+    const queryClient = useQueryClient();
+    const { data, isLoading } = useQuery({
+        queryFn: GET_ALL_CANDIDATES,
+        queryKey: ['candidates'],
+        staleTime: 30000
+    });
+
+    const { mutate: CreateCandidates } = useMutation({
+        mutationFn: CREATE_CANDIDATES,
+        onSuccess: () => {
+            form.reset();
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+        }
+    });
+
+    const { mutate: DeleteCandidates } = useMutation({
+        mutationFn: DELETE_CANDIDATES,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['candidates'] });
+        }
+    });
+
+    const [selectedRows, setSeletedRows] = useState([]);
+
+    const { data: DataOrg } = useQuery({
+        queryFn: GetAllOranizations,
+        queryKey: ['organizations']
+    });
+
+    const { toast } = useToast();
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const formData = new FormData();
@@ -254,6 +125,7 @@ const Candidates = () => {
             });
         });
 
+        CreateCandidates(formData);
         toast({
             title: 'You submitted the following values:',
             description: (
@@ -264,8 +136,13 @@ const Candidates = () => {
         });
     }
     function onSubmitDeleteCanditate() {
-        console.log(selectedRows);
+        DeleteCandidates({ ids: selectedRows });
     }
+
+    if (isLoading) {
+        return <div>loading</div>;
+    }
+
     return (
         <div className="my-5">
             <div className="flex justify-between">

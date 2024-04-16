@@ -7,31 +7,19 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { UPDATE_ORGANIZATION, DELETE_ORGANIZATION } from '@/api/services/admin/organizations';
-
-import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
-import { useParams, useNavigate } from 'react-router-dom';
-import { CircleChevronLeft, Save, Trash2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { useMutation } from '@tanstack/react-query';
+import { CREATE_ORGANIZATION } from '@/api/services/admin/organizations';
+import { useNavigate } from 'react-router-dom';
+import { CircleChevronLeft, Save } from 'lucide-react';
+import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import logo from '@/assets/favicon.png';
 
 const FormSchema = z.object({
-    file: z.instanceof(FileList).optional(),
+    file: z.any().refine((files) => files?.length >= 1, { message: 'Image is required.' }),
     title: z.string().min(1, {
         message: 'This field is required.'
     }),
@@ -43,41 +31,21 @@ const FormSchema = z.object({
     })
 });
 
-const OrganizationByIDAdmin = () => {
-    const { id } = useParams();
+const CreateOrganization = () => {
     const navigate = useNavigate();
 
-    const { mutate: updateOrganization } = useMutation({
-        mutationFn: UPDATE_ORGANIZATION,
-        onSuccess: () => {
-            toast({
-                title: 'Update Organization',
-                description: 'Organization Successfully Update'
-            });
-        }
-    });
+    const [imagePreview, setImagePreview] = useState<string>(logo);
 
-    const { mutate: DeleteOrganization } = useMutation({
-        mutationFn: DELETE_ORGANIZATION,
-        onSuccess: () => {
-            navigate('/admin/organizations');
-            toast({
-                title: 'Delete Organization',
-                description: 'Organization Successfully Deleted'
-            });
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
         }
-    });
-
-    const { data, isLoading }: any = useQuery({
-        queryFn: () => {
-            if (id) {
-                return GetOrganizationByID(id);
-            }
-            return null;
-        },
-        queryKey: [`organizations-${id}`]
-    });
-    const [value, setValue] = useState('');
+    };
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -86,18 +54,19 @@ const OrganizationByIDAdmin = () => {
             title: '',
             info: '',
             content: ''
-        },
-        values: {
-            file: data?.file || undefined,
-            title: data?.title || '',
-            info: data?.info || '',
-            content: data?.content || ''
         }
     });
 
-    if (isLoading) {
-        return <div>loading</div>;
-    }
+    const { mutate: createOrganization } = useMutation({
+        mutationFn: CREATE_ORGANIZATION,
+        onSuccess: () => {
+            form.reset();
+            toast({
+                title: 'Create Organization',
+                description: 'Organization Successfully Created'
+            });
+        }
+    });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const formData = new FormData();
@@ -109,7 +78,7 @@ const OrganizationByIDAdmin = () => {
         formData.append('info', data.info);
         formData.append('content', data.content);
 
-        updateOrganization({ id, data: formData });
+        createOrganization(formData);
     }
 
     return (
@@ -122,37 +91,39 @@ const OrganizationByIDAdmin = () => {
                 <CircleChevronLeft className="mr-2" />
                 BACK
             </Button>
+            <div className="mx-5 pt-5">
+                <h1 className="text-3xl font-semibold text-center">CREATE ORGANIZATION</h1>
+            </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg  flex gap-5">
+                    <div className="bg-slate-800 mx-5 mt-10 mb-[150px] p-5 rounded-lg flex gap-5">
                         <div className="w-1/2">
-                            <div className=" overflow-hidden">
-                                <div className="w-full grid place-items-center">
-                                    <Avatar className="w-[200px] h-[200px] border-2 border-primary">
-                                        <AvatarImage src={data?.picture} alt="logo" />
-                                    </Avatar>
-                                </div>
-                                <FormField
-                                    control={form.control}
-                                    name="file"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <Label className="text-white">Upload Image</Label>
-                                            <FormControl>
-                                                <Input
-                                                    className="text-white"
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => {
-                                                        field.onChange(e.target.files);
-                                                    }}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                            <div className="w-full grid place-items-center">
+                                <Avatar className="w-[200px] h-[200px] border-2 border-primary">
+                                    <AvatarImage src={imagePreview} alt="preview" />
+                                </Avatar>
                             </div>
+                            <FormField
+                                control={form.control}
+                                name="file"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <Label className="text-white">Upload Image</Label>
+                                        <FormControl>
+                                            <Input
+                                                className="text-white"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    field.onChange(e.target.files);
+                                                    handleFileChange(e);
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="title"
@@ -200,40 +171,8 @@ const OrganizationByIDAdmin = () => {
                                         variant="outline"
                                         className="hover:bg-primary hover:text-white w-full">
                                         <Save />
-                                        <p>Save changes</p>
+                                        <p>Create Organization</p>
                                     </Button>
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button
-                                                type="button"
-                                                className="text-white w-full my-5 flex gap-1">
-                                                <Trash2 />
-                                                <p>Delete</p>
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    Are you absolutely sure?
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    This action cannot be undone. This will
-                                                    permanently delete the organization and remove
-                                                    data from server.
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction
-                                                    className="text-white"
-                                                    onClick={() => {
-                                                        DeleteOrganization(id);
-                                                    }}>
-                                                    Continue
-                                                </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
                                 </div>
                             </div>
                             <FormField
@@ -246,12 +185,11 @@ const OrganizationByIDAdmin = () => {
                                                 <Label className="text-white">Content</Label>
                                                 <div className="w-full text-center m-2">
                                                     <ReactQuill
-                                                        className="w-full text-white "
+                                                        className="w-full text-white"
                                                         theme="snow"
                                                         value={field.value}
                                                         onChange={(newValue) => {
                                                             field.onChange(newValue);
-                                                            setValue(newValue);
                                                         }}
                                                     />
                                                 </div>
@@ -269,4 +207,4 @@ const OrganizationByIDAdmin = () => {
     );
 };
 
-export default OrganizationByIDAdmin;
+export default CreateOrganization;
