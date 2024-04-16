@@ -54,7 +54,8 @@ export const createVote = async (req, res) => {
 
     const voterId = req.user.id;
 
-    const existingVoter = await Voters.find({ googleId: voterId });
+    const existingVoter = await Voters.findById(voterId);
+
     if (existingVoter.status) {
       return res.status(403).json({
         success: false,
@@ -97,8 +98,7 @@ export const createVote = async (req, res) => {
     const voteIDs = await Promise.all(votePromises);
 
     await Voters.findByIdAndUpdate(voterId, {
-      $set: { status: true },
-      $push: { votes: { $each: [voteIDs] } },
+      $set: { status: true, votes: voteIDs },
     });
 
     res

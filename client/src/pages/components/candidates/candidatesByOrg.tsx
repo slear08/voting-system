@@ -3,11 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetCandidatesByOrgID } from '@/api/services/general/GetCandidate';
 import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
+import { CREATE_VOTE } from '@/api/services/admin/voters';
 import CandidateCard from '@/components/cards/candidate-card';
 import { Button } from '@/components/ui/button';
 import useUserStore from '@/store/useUserStore';
 import { RedirectToGoogleSSO } from '@/api/services/client/GoogleSignIn';
 import { BookOpenCheck } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from '@/components/ui/use-toast';
 
 const CandidateByOrg = () => {
     const { user }: any = useUserStore();
@@ -33,6 +36,23 @@ const CandidateByOrg = () => {
         queryKey: [`organizations-name`]
     });
 
+    const { mutate: CreateVote } = useMutation({
+        mutationFn: CREATE_VOTE,
+        onSuccess: () => {
+            toast({
+                title: 'VOTES',
+                description: 'Vote Submitted Successfully'
+            });
+        },
+        onError: (error: any) => {
+            toast({
+                variant: 'destructive',
+                title: 'Submitting Votes Failed',
+                description: error.response.data.message
+            });
+        }
+    });
+
     const [selectedCandidates, setSelectedCandidates] = useState<{ [position: string]: string }>(
         {}
     );
@@ -46,8 +66,7 @@ const CandidateByOrg = () => {
 
     const handleSubmit = () => {
         const selectedCandidateIds = Object.values(selectedCandidates);
-        console.log(selectedCandidateIds); // This array contains only candidate IDs as strings
-        // Here you can perform further actions such as submitting the selected candidates
+        CreateVote({ candidateID: selectedCandidateIds });
     };
 
     if (isLoading) {
