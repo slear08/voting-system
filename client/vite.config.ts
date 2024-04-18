@@ -14,7 +14,7 @@ export default defineConfig({
         port: 4000,
         proxy: {
             '/api': {
-                target: 'http://localhost:3000',
+                target: 'https://voting-system-t1t9.onrender.com',
                 changeOrigin: true
             }
         }
