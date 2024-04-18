@@ -50,13 +50,19 @@ export const createVoter = async (req, res) => {
 
 export const createVote = async (req, res) => {
   try {
-    const { candidateID } = req.body;
+    const { candidateID, email } = req.body;
 
-    const voterId = req.user.id;
+    // const voterId = req.user.id;
 
-    const existingVoter = await Voters.findById(voterId);
+    const existingVoter = await Voters.find({ email });
 
-    if (existingVoter.status) {
+    if (existingVoter.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "You are not registered",
+      });
+    }
+    if (existingVoter[0].status) {
       return res.status(403).json({
         success: false,
         message: "You have already voted",
@@ -82,7 +88,7 @@ export const createVote = async (req, res) => {
 
       const newVote = new Votes({
         candidateID: candidate._id,
-        voter: voterId,
+        voter: existingVoter[0]._id,
         candidate: candidate.fullname,
         position: candidate.position,
       });
@@ -97,9 +103,10 @@ export const createVote = async (req, res) => {
 
     const voteIDs = await Promise.all(votePromises);
 
-    await Voters.findByIdAndUpdate(voterId, {
-      $set: { status: true, votes: voteIDs },
-    });
+    await Voters.updateOne(
+      { email },
+      { $set: { status: true, votes: voteIDs } }
+    );
 
     res
       .status(201)

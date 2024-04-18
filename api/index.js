@@ -22,7 +22,7 @@ connectDB();
 const PORT = process.env.PORT || 6000;
 
 const app = express();
-
+app.set("trust proxy", 1);
 app.use(
   cookieSession({
     name: "session",

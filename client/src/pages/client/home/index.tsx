@@ -20,7 +20,7 @@ const Home = () => {
                         className={
                             'w-40 text-white flex gap-2 font-semibold hover:bg-primary-foreground bg-primary rounded-full py-2 px-5'
                         }
-                        onClick={() => (user ? navigate('/candidates') : RedirectToGoogleSSO())}>
+                        onClick={() => navigate('/candidates')}>
                         <BookOpenCheck />
                         Vote Now
                     </Button>

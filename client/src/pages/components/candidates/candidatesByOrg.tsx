@@ -1,3 +1,29 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
+
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -12,10 +38,19 @@ import { BookOpenCheck } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
 
+const FormSchema = z.object({
+    email: z
+        .string()
+        .min(1, { message: 'This field has to be filled.' })
+        .refine((value) => /\b[A-Za-z0-9._%+-]+@g\.batstate\.edu\.ph\b/.test(value), {
+            message: 'Invalid email use your institutional email @g.batstate.edu.ph'
+        })
+});
+
 const CandidateByOrg = () => {
-    const { user }: any = useUserStore();
     const { id } = useParams();
     const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
     const { data, isLoading } = useQuery({
         queryFn: () => {
             if (id) {
@@ -24,6 +59,13 @@ const CandidateByOrg = () => {
             return null;
         },
         queryKey: [`candidates-org-${id}`]
+    });
+
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            email: ''
+        }
     });
 
     const { data: Organization } = useQuery({
@@ -39,12 +81,15 @@ const CandidateByOrg = () => {
     const { mutate: CreateVote } = useMutation({
         mutationFn: CREATE_VOTE,
         onSuccess: () => {
+            setIsOpen(false);
+            form.reset();
             toast({
                 title: 'VOTES',
                 description: 'Vote Submitted Successfully'
             });
         },
         onError: (error: any) => {
+            setIsOpen(false);
             toast({
                 variant: 'destructive',
                 title: 'Submitting Votes Failed',
@@ -64,10 +109,10 @@ const CandidateByOrg = () => {
         }));
     };
 
-    const handleSubmit = () => {
+    function onSubmit(data: z.infer<typeof FormSchema>) {
         const selectedCandidateIds = Object.values(selectedCandidates);
-        CreateVote({ candidateID: selectedCandidateIds });
-    };
+        CreateVote({ email: data.email, candidateID: selectedCandidateIds });
+    }
 
     if (isLoading) {
         return <div>Loading</div>;
@@ -126,12 +171,8 @@ const CandidateByOrg = () => {
                                 return (
                                     <div
                                         key={candidate.id}
-                                        className={`${user ? 'cursor-pointer' : ''}`}
-                                        onClick={
-                                            user
-                                                ? () => handleCardClick(candidate.id, position)
-                                                : undefined
-                                        }>
+                                        className="cursor-pointer"
+                                        onClick={() => handleCardClick(candidate.id, position)}>
                                         <CandidateCard
                                             fullname={candidate.fullname}
                                             id={candidate.id}
@@ -149,22 +190,44 @@ const CandidateByOrg = () => {
                 </div>
             ))}
             <div className="w-full flex justify-center items-center">
-                {user ? (
-                    <Button
-                        className="w-1/2 bg-primary hover:bg-primary-foreground text-white"
-                        onClick={handleSubmit}>
-                        SUBMIT VOTES
-                    </Button>
-                ) : (
-                    <Button
-                        className={
-                            'text-white flex gap-2 font-semibold hover:bg-primary-foreground bg-primary rounded-full py-2 px-5'
-                        }
-                        onClick={RedirectToGoogleSSO}>
-                        <BookOpenCheck />
-                        Log in your institutional email
-                    </Button>
-                )}
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button className="w-1/2 bg-primary hover:bg-primary-foreground text-white">
+                            SUBMIT VOTES
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                Please provide your registered email to be able to count your votes.
+                            </AlertDialogTitle>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onSubmit)}>
+                                    <FormField
+                                        control={form.control}
+                                        name="email"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Email</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="johndoe@g.batstate.edu.ph"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <AlertDialogFooter className="mt-5">
+                                        <AlertDialogCancel>Close</AlertDialogCancel>
+                                        <Button className="text-white">Submit</Button>
+                                    </AlertDialogFooter>
+                                </form>
+                            </Form>
+                        </AlertDialogHeader>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
     );
