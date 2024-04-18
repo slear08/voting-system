@@ -42,8 +42,8 @@ const FormSchema = z.object({
     email: z
         .string()
         .min(1, { message: 'This field has to be filled.' })
-        .refine((value) => /\b[A-Za-z0-9._%+-]+@g\.batstate\.edu\.ph\b/.test(value), {
-            message: 'Invalid email use your institutional email @g.batstate.edu.ph'
+        .refine((value) => /\b[A-Za-z0-9._%+-]+@g\.batstate-u\.edu\.ph\b/.test(value), {
+            message: 'Invalid email use your institutional email @g.batstate-u.edu.ph'
         })
 });
 

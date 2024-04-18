@@ -10,7 +10,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="w-full flex">
+        <div className="w-full flex p-5 h-screen">
             <div className="w-1/2 flex flex-col items-center justify-center">
                 <div className="h-1/2 flex flex-col gap-5">
                     <h1 className="text-7xl">Unlock your Voice</h1>
