@@ -14,6 +14,7 @@ import organizationRoutes from "./routes/organization.routes.js";
 import voterRoutes from "./routes/voters.routes.js";
 import adminRoute from "./routes/admin.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
+import resetRoutes from "./routes/reset.routes.js";
 
 dotenv.config();
 connectDB();
@@ -21,7 +22,7 @@ connectDB();
 const PORT = process.env.PORT || 6000;
 
 const app = express();
-
+app.set("trust proxy", 1);
 app.use(
   cookieSession({
     name: "session",
@@ -69,6 +70,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", organizationRoutes);
 app.use("/api", voterRoutes);
 app.use("/api", statsRoutes);
+app.use("/api", resetRoutes);
 
 app.get("/", (req, res) => res.send("SERVER IS READY!"));
 

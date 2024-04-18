@@ -11,15 +11,13 @@ const Authenticated = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userDetails = await GetUserDetails();
                 setTimeout(() => {
-                    setUser(userDetails);
                     navigate('/candidates', { replace: true });
-                }, 3000);
+                }, 100);
             } catch (error) {
                 setTimeout(() => {
                     navigate('/signin', { replace: true });
-                }, 3000);
+                }, 100);
                 console.error('Error fetching user details:', error);
             }
         };

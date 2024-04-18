@@ -1,5 +1,5 @@
 import logo from '@/assets/logo.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Bell, Users, ScrollText, Building2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,12 +13,34 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AdminLogout } from '@/api/services/admin/auth';
 import useAuthStore from '@/store/useAuthStore';
+import { SYSTEM_RESET } from '@/api/services/admin/reset';
+import { toast } from '@/components/ui/use-toast';
+
 const Sidebar = () => {
+    const navigate = useNavigate();
     const { logout } = useAuthStore();
+    const queryClient = useQueryClient();
+
     const { mutate: MutateLogOut } = useMutation({ mutationFn: AdminLogout });
+    const { mutate: SystemReset } = useMutation({
+        mutationFn: SYSTEM_RESET,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['candidates', 'organizations', 'results', 'stats']
+            });
+            navigate('/admin/reset');
+        },
+        onError: (error: any) => {
+            toast({
+                variant: 'destructive',
+                title: 'Submitting Votes Failed',
+                description: error.response.data.message
+            });
+        }
+    });
     return (
         <div className="bg-slate-200 h-screen p-5">
             <div className="p-10">
@@ -132,7 +154,11 @@ const Sidebar = () => {
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction className="text-white">
+                                        <AlertDialogAction
+                                            className="text-white"
+                                            onClick={() => {
+                                                SystemReset();
+                                            }}>
                                             Continue
                                         </AlertDialogAction>
                                     </AlertDialogFooter>

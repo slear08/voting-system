@@ -7,7 +7,11 @@ import {
   userDetails,
   logoutAdmin,
 } from "../controllers/auth.controllers.js";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import {
+  authMiddleware,
+  authAdminMiddleware,
+} from "../middlewares/auth.middleware.js";
+import { ChangePassword } from "../controllers/change-password.controllers.js";
 
 const router = express.Router();
 
@@ -19,5 +23,6 @@ router.get("/login/success", authMiddleware, userDetails);
 router.get("/login/google", googleLogin);
 router.get("/google/callback", googleCallback);
 router.post("/logout", logout);
+router.post("/change-password", authAdminMiddleware, ChangePassword);
 
 export default router;

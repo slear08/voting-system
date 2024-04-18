@@ -20,9 +20,11 @@ const About = () => {
                             What is <span className="text-primary">iSelect</span> ?
                         </h1>
                         <p className="text-2xl">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis, eum?
-                            Ea aperiam repellendus assumenda voluptatum dolor, eos maxime voluptate
-                            minima?
+                            iSelect is dedicated to revolutionizing student engagement through its
+                            mission of empowering students with a secure, convenient, and inclusive
+                            online voting platform, fostering democratic participation within
+                            educational institutions. Join us to empower your voice and choose the
+                            best candidates for a brighter tomorrow.
                         </p>
                         <Accordion type="multiple" className="w-full">
                             <AccordionItem value="item-1">
@@ -30,9 +32,9 @@ const About = () => {
                                     Our mission
                                 </AccordionTrigger>
                                 <AccordionContent className="text-xl">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                    Possimus nesciunt dolor laborum blanditiis pariatur consequatur
-                                    laboriosam sapiente provident suscipit in.
+                                    To empower students with a secure, convenient, and inclusive
+                                    online voting platform, fostering democratic participation and
+                                    engagement within educational institutions.
                                 </AccordionContent>
                             </AccordionItem>
                             <AccordionItem value="item-2">
@@ -40,9 +42,10 @@ const About = () => {
                                     Our Vision
                                 </AccordionTrigger>
                                 <AccordionContent className="text-xl">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                    Possimus nesciunt dolor laborum blanditiis pariatur consequatur
-                                    laboriosam sapiente provident suscipit in.
+                                    We envision a future where every student has equal access to
+                                    participate in the democratic process, shaping their educational
+                                    environment through transparent, efficient, and technologically
+                                    advanced online voting systems.
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>
@@ -57,8 +60,8 @@ const About = () => {
                     <div>
                         <h1 className="text-5xl">Our Team</h1>
                         <p className="text-2xl">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                            Necessitatibus, officia.
+                            Introducing Our Powerhouse Developers: Crafting Innovation, Building
+                            Tomorrow's Solutions.
                         </p>
                     </div>
                     <div className="h-full flex justify-center items-center blur-xl">
@@ -66,10 +69,10 @@ const About = () => {
                     </div>
                 </div>
                 <div className="w-1/2 flex flex-wrap gap-28">
-                    <div className="flex gap-5">
+                    <div className="flex gap-5 items-center">
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
-                                src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 alt="JOEVENEL EURANGO JR."
                             />
                         </div>
@@ -79,13 +82,13 @@ const About = () => {
                                     JOEVENEL EURANGO JR.
                                 </p>
                             </div>
-                            <div>
+                            {/* <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem
                                 voluptatibus nisi pariatur aspernatur voluptates, natus quibusdam
                                 iure deleniti reiciendis.
-                            </div>
+                            </div> */}
                             <div className="flex gap-5">
-                                <div className="flex justify-center items-center gap-1">
+                                {/* <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
                                         <img src={twitter} alt="CEO" />
                                     </div>
@@ -95,25 +98,25 @@ const About = () => {
                                         rel="noopener noreferrer">
                                         @joevenel
                                     </a>
-                                </div>
+                                </div> */}
                                 <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
                                         <img src={facebook} alt="CEO" />
                                     </div>
                                     <a
-                                        href="https://twitter.com/"
+                                        href="https://www.facebook.com/imjoevenel"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        @joevenel
+                                        @imjoevenel
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-5">
+                    <div className="flex gap-5 items-center">
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
-                                src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                src="https://scontent.fmnl17-3.fna.fbcdn.net/v/t39.30808-6/355911602_3418695875112108_5426195540496468157_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeH98fKCFeO9sZnbnVwsXBsQcYS-rtzOw3NxhL6u3M7Dc_xRpBW7EiiA7d7W0_sHppYaVI9C5BaxqaeJle2r6sGs&_nc_ohc=icdsbl0QBHkAb4zndR5&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfBGn0aZvQeVmJmHrBjmwLBfD7TNpfPyV6z8HpXwCBsZZQ&oe=6626BA49"
                                 alt="EDMAR DE GUZMAN"
                             />
                         </div>
@@ -123,24 +126,24 @@ const About = () => {
                                     EDMAR DE GUZMAN
                                 </p>
                             </div>
-                            <div>
+                            {/* <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem
                                 voluptatibus nisi pariatur aspernatur voluptates, natus quibusdam
                                 iure deleniti reiciendis.
-                            </div>
+                            </div> */}
                             <div className="flex gap-5">
                                 <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
-                                        <img src={twitter} alt="CEO" />
+                                        <img src={facebook} alt="CEO" />
                                     </div>
                                     <a
-                                        href="https://twitter.com/"
+                                        href="https://www.facebook.com/profile.php?id=100009151877659"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        @joevenel
+                                        @ed_dgzmnn
                                     </a>
                                 </div>
-                                <div className="flex justify-center items-center gap-1">
+                                {/* <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
                                         <img src={facebook} alt="CEO" />
                                     </div>
@@ -150,11 +153,11 @@ const About = () => {
                                         rel="noopener noreferrer">
                                         @joevenel
                                     </a>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-5">
+                    <div className="flex gap-5 items-center">
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
                                 src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -165,13 +168,13 @@ const About = () => {
                             <div>
                                 <p className="text-xl font-semibold text-primary">BIEN AGUIRE</p>
                             </div>
-                            <div>
+                            {/* <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem
                                 voluptatibus nisi pariatur aspernatur voluptates, natus quibusdam
                                 iure deleniti reiciendis.
-                            </div>
+                            </div> */}
                             <div className="flex gap-5">
-                                <div className="flex justify-center items-center gap-1">
+                                {/* <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
                                         <img src={twitter} alt="CEO" />
                                     </div>
@@ -181,16 +184,16 @@ const About = () => {
                                         rel="noopener noreferrer">
                                         @joevenel
                                     </a>
-                                </div>
+                                </div> */}
                                 <div className="flex justify-center items-center gap-1">
                                     <div className="w-5 h-5">
                                         <img src={facebook} alt="CEO" />
                                     </div>
                                     <a
-                                        href="https://twitter.com/"
+                                        href="https://www.facebook.com/Bienjanssen7"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        @joevenel
+                                        @Bienjanssen7
                                     </a>
                                 </div>
                             </div>

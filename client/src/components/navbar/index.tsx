@@ -78,10 +78,10 @@ const Navbar = () => {
                             'text-white flex gap-2 font-semibold hover:bg-primary-foreground bg-primary rounded-full py-2 px-5'
                         }
                         onClick={() => {
-                            user ? navigate('/candidates') : RedirectToGoogleSSO();
+                            RedirectToGoogleSSO();
                         }}>
                         <BookOpenCheck />
-                        Vote Now
+                        Register to Vote
                     </Button>
                 )}
 

@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/voters", createVoter);
 router.get("/voters", getAllVoters);
 // Route for marking a voter as voted
-router.post("/voters/vote-candidate", authMiddleware, createVote);
+router.post("/voters/vote-candidate", createVote);
 //Route for updating organization
 router.post(
   "/voters/organization/:id",

@@ -18,7 +18,13 @@ const Organization = () => {
     if (!data || data.length === 0) {
         return (
             <div className="flex justify-center mt-40 h-screen">
-                <h1 className="font-bold text-5xl text-slate-800">No Organizations</h1>
+                <div className="text-center">
+                    <h1 className="font-bold text-5xl text-slate-800">No Organizations</h1>
+                    <Button onClick={() => navigate('org/create')} className="text-white mt-5">
+                        <SquarePlus />
+                        <p>Create Organization</p>
+                    </Button>
+                </div>
             </div>
         );
     }

@@ -19,3 +19,13 @@ export const AdminLogout = async () => {
         throw error;
     }
 };
+
+export const AdminChangePassword = async (data: any) => {
+    try {
+        const response = await axiosInstance.post(`/auth/change-password`, data);
+        return response.data;
+    } catch (error) {
+        console.error('Request error:', error);
+        throw error;
+    }
+};
