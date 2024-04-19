@@ -3,6 +3,7 @@ import { GetOrganizationByID } from '@/api/services/general/GetOgranization';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircleChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Preload from '@/components/preload';
 
 const OrganizationByID = () => {
     const { id } = useParams();
@@ -18,7 +19,7 @@ const OrganizationByID = () => {
     });
 
     if (isLoading) {
-        return <div>loading</div>;
+        return <Preload />;
     }
 
     return (

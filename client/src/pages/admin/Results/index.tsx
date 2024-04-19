@@ -1,6 +1,7 @@
 import OrganizationCard from '@/components/cards/organization-card';
 import { useQuery } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
+import Preload from '@/components/preload';
 
 const Results = () => {
     const { data, isLoading } = useQuery({
@@ -9,7 +10,7 @@ const Results = () => {
     });
 
     if (isLoading) {
-        <div>Loading</div>;
+        return <Preload />;
     }
 
     if (!data || data.length === 0) {

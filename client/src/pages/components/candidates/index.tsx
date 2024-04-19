@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetCandidateByID } from '@/api/services/general/GetCandidate';
 import { Button } from '@/components/ui/button';
-
+import Preload from '@/components/preload';
 const CandidatesByID = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const CandidatesByID = () => {
     });
 
     if (isLoading) {
-        return <div>Loading</div>;
+        return <Preload />;
     }
 
     return (

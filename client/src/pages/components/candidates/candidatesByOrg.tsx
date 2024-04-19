@@ -37,7 +37,7 @@ import { RedirectToGoogleSSO } from '@/api/services/client/GoogleSignIn';
 import { BookOpenCheck } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from '@/components/ui/use-toast';
-
+import Preload from '@/components/preload';
 const FormSchema = z.object({
     email: z
         .string()
@@ -115,7 +115,7 @@ const CandidateByOrg = () => {
     }
 
     if (isLoading) {
-        return <div>Loading</div>;
+        return <Preload />;
     }
 
     if (!data || data?.candidates?.length === 0) {

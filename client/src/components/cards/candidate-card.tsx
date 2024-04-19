@@ -15,7 +15,7 @@ const CandidateCard = ({ fullname, id, profile, isSelected }: any) => {
                 <h2 className="text-xl font-medium text-white mb-6">{fullname}</h2>
                 <Link
                     to={`/candidate/${id}`}
-                    className="px-4 py-2 bg-primary hover:bg-primary-foreground text-white rounded-full">
+                    className="p-2 bg-primary hover:bg-primary-foreground text-white rounded-full">
                     View Candidate
                 </Link>
             </div>

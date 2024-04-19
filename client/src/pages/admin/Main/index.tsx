@@ -1,19 +1,24 @@
 import { CircleUser, AreaChart } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { GET_RESULTS, GET_STATS } from '@/api/services/admin/results';
+import Preload from '@/components/preload';
 const Main = () => {
     // Sample data
-    const { data: results } = useQuery({
+    const { data: results, isLoading: resultLoading } = useQuery({
         queryFn: GET_RESULTS,
         queryKey: ['results'],
         staleTime: 30000
     });
 
-    const { data: stats } = useQuery({
+    const { data: stats, isLoading: statsLoading } = useQuery({
         queryFn: GET_STATS,
         queryKey: ['stats'],
         staleTime: 30000
     });
+
+    if (resultLoading || statsLoading) {
+        return <Preload />;
+    }
 
     function getCandidatesByOrganization(data: any) {
         const candidatesByOrganization: any = {};
