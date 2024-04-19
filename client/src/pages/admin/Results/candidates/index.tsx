@@ -1,15 +1,17 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GetCandidatesByOrgID } from '@/api/services/general/GetCandidate';
-
+import Preload from '@/components/preload';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
-
+import { useNavigate } from 'react-router-dom';
+import { SquarePlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 const CandidatesResults = () => {
     const { id }: any = useParams();
-
+    const navigate = useNavigate();
     const {
         data: candidatesData,
         isLoading,
@@ -21,7 +23,7 @@ const CandidatesResults = () => {
     });
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Preload />;
     }
 
     if (isError) {
@@ -35,6 +37,12 @@ const CandidatesResults = () => {
                     {candidatesData?.organization?.title}
                 </h1>
                 <h1 className="text-3xl font-semibold">No candidate data available</h1>
+                <Button
+                    className="bg-primary hover:bg-primary-foreground px-4 py-2 rounded-full text-white"
+                    onClick={() => navigate('/admin/candidates')}>
+                    <SquarePlus className="mr-2" />
+                    Create Candidates
+                </Button>
             </div>
         );
     }

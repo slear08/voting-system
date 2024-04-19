@@ -29,6 +29,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CircleChevronLeft, Save, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import Preload from '@/components/preload';
 
 const FormSchema = z.object({
     file: z.instanceof(FileList).optional(),
@@ -96,7 +97,7 @@ const OrganizationByIDAdmin = () => {
     });
 
     if (isLoading) {
-        return <div>loading</div>;
+        return <Preload />;
     }
 
     function onSubmit(data: z.infer<typeof FormSchema>) {

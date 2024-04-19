@@ -72,7 +72,7 @@ const About = () => {
                     <div className="flex gap-5 items-center">
                         <div className="w-48 h-48 rounded-full overflow-hidden">
                             <img
-                                src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                src="https://scontent.fmnl4-4.fna.fbcdn.net/v/t39.30808-6/404478375_3569585926586555_6396988765399474011_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHmnGa7HX3QVIF865RUR1mZVtNFQliobFJW00VCWKhsUkDbhYm8_BoKIQzILT7w3AxAN_J7IgqTPk_-zHF_Z0eV&_nc_ohc=29z3QkZ92d4Ab48t2Ze&_nc_ht=scontent.fmnl4-4.fna&oh=00_AfCwz9tRaLJ9c2771DqNuwPt9e2JXNst-0vo5VG6tRSI5Q&oe=6626B425"
                                 alt="JOEVENEL EURANGO JR."
                             />
                         </div>
@@ -158,15 +158,17 @@ const About = () => {
                         </div>
                     </div>
                     <div className="flex gap-5 items-center">
-                        <div className="w-48 h-48 rounded-full overflow-hidden">
+                        <div className="rounded-full overflow-hidden">
                             <img
-                                src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                src="https://scontent.xx.fbcdn.net/v/t1.15752-9/436658264_453565067207352_4934201058522224566_n.jpg?stp=dst-jpg_p228x119&_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHFFIAzds4g38NfDa4mgdDIxdUK_ePrBwLF1Qr94-sHAs8KXWjAa4jLQgiYbFvqtA-2jkxAouwnwGlEIeArIz4h&_nc_ohc=F2YVcUVzGM0Ab6pleEH&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_Q7cD1QE_muP-gfRrJM9IRjAqOmGF_67dTL5vAIlQ3e0e6IFwoQ&oe=6648770F"
                                 alt="BIEN AGUIRE"
                             />
                         </div>
                         <div className="flex-1 flex flex-col gap-5">
                             <div>
-                                <p className="text-xl font-semibold text-primary">BIEN AGUIRE</p>
+                                <p className="text-xl font-semibold text-primary">
+                                    BIEN JANSSEN C. AGUIRRE
+                                </p>
                             </div>
                             {/* <div>
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad dolorem

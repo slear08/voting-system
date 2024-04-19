@@ -53,8 +53,9 @@ import {
 } from '@/api/services/admin/candidates';
 import { DataTable } from '@/components/data-table';
 import { columns, FormSchema } from './columns';
-
 import { useState } from 'react';
+import Preload from '@/components/preload';
+
 const Candidates = () => {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -136,7 +137,7 @@ const Candidates = () => {
     }
 
     if (isLoading) {
-        return <div>loading</div>;
+        return <Preload />;
     }
 
     return (

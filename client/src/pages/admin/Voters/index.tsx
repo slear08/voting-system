@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { GET_ALL_VOTERS } from '@/api/services/admin/voters';
 import { DataTable } from '@/components/data-table';
 import { columns } from './columns';
+import Preload from '@/components/preload';
 const Voters = () => {
     const { data, isLoading } = useQuery({
         queryFn: GET_ALL_VOTERS,
@@ -9,7 +10,7 @@ const Voters = () => {
     });
 
     if (isLoading) {
-        return <div>loading</div>;
+        return <Preload />;
     }
 
     return (

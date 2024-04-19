@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CircleChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
+import Preload from '@/components/preload';
 const OrganizationByID = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const OrganizationByID = () => {
     });
 
     if (isLoading) {
-        return <div>loading</div>;
+        return <Preload />;
     }
 
     return (

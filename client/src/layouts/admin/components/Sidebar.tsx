@@ -165,32 +165,34 @@ const Sidebar = () => {
                                 </AlertDialogContent>
                             </AlertDialog>
                         </div>
-                    </div>
-                    <div className="w-full">
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button className="w-full text-white">LOGOUT</Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        You want to logout?
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction
-                                        className="text-white"
-                                        onClick={() => {
-                                            MutateLogOut();
-                                            logout();
-                                        }}>
-                                        Continue
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <div className="w-full mt-4">
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button className="w-full text-white">LOGOUT</Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Are you absolutely sure?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            You want to logout?
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            className="text-white"
+                                            onClick={() => {
+                                                MutateLogOut();
+                                                logout();
+                                            }}>
+                                            Continue
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
                     </div>
                 </div>
             </div>

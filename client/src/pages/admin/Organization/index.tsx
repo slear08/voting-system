@@ -4,6 +4,7 @@ import { GetAllOranizations } from '@/api/services/general/GetOgranization';
 import { Button } from '@/components/ui/button';
 import { SquarePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Preload from '@/components/preload';
 const Organization = () => {
     const navigate = useNavigate();
     const { data, isLoading } = useQuery({
@@ -12,7 +13,7 @@ const Organization = () => {
     });
 
     if (isLoading) {
-        <div>Loading</div>;
+        return <Preload />;
     }
 
     if (!data || data.length === 0) {
