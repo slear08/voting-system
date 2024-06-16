@@ -2,6 +2,7 @@ import OrganizationCard from '@/components/cards/organization-card';
 import { useQuery } from '@tanstack/react-query';
 import { GetAllOranizations } from '@/api/services/general/GetOgranization';
 import Preload from '@/components/preload';
+
 const Organization = () => {
     const { data, isLoading } = useQuery({
         queryFn: GetAllOranizations,
@@ -9,10 +10,10 @@ const Organization = () => {
     });
 
     if (isLoading) {
-        <Preload />;
+        return <Preload />;
     }
 
-    if (!data || data.length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
         return (
             <div className="flex justify-center mt-40 h-screen">
                 <h1 className="font-bold text-5xl text-slate-800">No Organizations</h1>
@@ -27,13 +28,13 @@ const Organization = () => {
             </div>
             <div className="mx-auto px-10 py-16">
                 <div className="grid grid-cols-3 gap-4">
-                    {data?.map((data: any, key: any) => (
+                    {data.map((organization: any, index: number) => (
                         <OrganizationCard
-                            key={key}
-                            image={data.picture}
-                            title={data.title}
-                            info={data.info}
-                            link={`/organizations/${data._id}`}
+                            key={index}
+                            image={organization.picture}
+                            title={organization.title}
+                            info={organization.info}
+                            link={`/organizations/${organization._id}`}
                         />
                     ))}
                 </div>
