@@ -1,6 +1,9 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +17,7 @@ export default defineConfig({
         port: 4000,
         proxy: {
             '/api': {
-                target: 'https://voting-system-t1t9.onrender.com',
+                target: process.env.VITE_SERVER,
                 changeOrigin: true
             }
         }
