@@ -52,7 +52,7 @@ app.use(function (request, response, next) {
 
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.SERVER_URL,
     credentials: true,
   })
 );
